@@ -27,7 +27,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');
 // @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono');
 
-// $backgroundColor: #fff;
+$backgroundColor: #fff;
 
 // $mainColor: #000;
 // $headingColor: #111;
@@ -74,7 +74,7 @@ section.has-light-background {
 .reveal strong,
 .reveal b {
 	font-weight: bold;
-	color: #b81f0b
+	color: #0616cc
 }
 
 .reveal em {
@@ -157,7 +157,7 @@ section.has-light-background {
 
 .reveal blockquote::before{
 	font-family:Arial;
-	content: "\201C";
+	// content: "\201C";
 	color:#039418;
 	font-size: 4em;
 	position: absolute;
@@ -172,7 +172,7 @@ section.has-light-background {
 
 .reveal blockquote::after{
 	font-family:Arial;
-	content: "\201D";
+	// content: "\201D";
 	color:#039418;
 	font-size: 4em;
 	position: absolute;
@@ -253,6 +253,11 @@ kbd {
 	justify-content: center;
 }
 
+.hint {
+	font-size: 0.4em;
+	color: gray;
+}
+
 .reveal .slide-background {
 	background-color: $backgroundColor;
 	background-image: $logo;
@@ -260,32 +265,32 @@ kbd {
 	background-position: 0.45% 99.2%;
 	background-size: 15%;
 	background-clip: border-box;
-	border-radius: 30px;
-	border-style: solid;
-	border-color: $detailBackgroundColor;
-	border-width: 0.3em;
+	// border-radius: 30px;
+	// border-style: solid;
+	// border-color: $detailBackgroundColor;
+	// border-width: 0.3em;
 }
 
 .reveal .slide-background:after {
-	content: "Authors - Title - Venue Year";
+	content: "Giovanni Ciatto — \"A cosa ci serve l'IA?\" — 2024";
 	position: absolute;
 	bottom: 2.5%;
 	right: 6%;
 	z-index: -1;
 	color: $detailBackgroundColor;
-	font-size: .8em;
+	font-size: .4em;
   }
 
 
-  // Multicolumn styling
+// Multicolumn styling
 
-  .reveal div.col {
+.reveal div.col {
 	// draw a red border
 	// border: 1px solid red;
 	text-align: left;
-	border: .2em dashed $detailBackgroundColor;
-	border-style: double;
-	border-radius: 1em;
+	// border: .2em dashed $detailBackgroundColor;
+	// border-style: double;
+	// border-radius: 1em;
 	padding: 0.5em;
 }
 
