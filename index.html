@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="en"><head>
+	<meta name="generator" content="Hugo 0.149.0">
+    <meta charset="utf-8">
+<title>Structure and Automate AI Workflows with MLOps</title>
+<meta name="description" content="Introduction to ML- and LLM-Ops">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><link rel="stylesheet" href="/talk-2025-mlops/reveal-js/dist/reset.css">
+<link rel="stylesheet" href="/talk-2025-mlops/reveal-js/dist/reveal.css">
+  <link rel="stylesheet" href="/talk-2025-mlops/css/custom-theme.min.65fa79b02f8fe68d3655adcf4867323674c3fa33bddd2020db86277df72a8da9.css" id="theme"><link rel="stylesheet" href="/talk-2025-mlops/highlight-js/solarized-dark.min.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Oxygen Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu Mono" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/gh/DanySK/css-blur-animation/blur.css" rel="stylesheet" crossorigin="anonymous">
+
+<script src="https://kit.fontawesome.com/81ac037be0.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+  </head>
+  <body>
+    
+    <div class="reveal">
+      <div class="slides">
+  
+
+    <section>
+
+<section data-shortcode-section="">
+<h1 id="structure-and-automate-ai-workflows-with-mlops">Structure and Automate AI Workflows with MLOps</h1>
+<p><a href="mailto:giovanni.ciatto@unibo.it">Giovanni Ciatto</a>
+<br> Dipartimento di Informatica — Scienza e Ingegneria (DISI), Sede di Cesena,
+<br> Alma Mater Studiorum—Università di Bologna</p>
+<!-- 
+
+
+
+
+<img src='./front.png' alt='' style='max-width: 95vw; max-height: 50vh; object-fit: contain;'>
+ -->
+<p><span class="hint">(versione presentazione: 2025-09-04
+)</span></p>
+</section><section>
+<h2 id="link-a-queste-slide">Link a queste slide</h2>
+<p><a href="https://gciatto.github.io/talk-2025-mlops/">https://gciatto.github.io/talk-2025-mlops/</a></p>
+<div id="ZTI2ZDA3MTYwNWExNjNhN2I0NWQ5MGQyMDJlMjQxYjkyYzI3MTUwYTk5YzRkZTY4MWYyOWIyOTEyMTAwMGZjMg==" style=""></div>
+<script type="text/javascript">
+    const qrCode = new QRCodeStyling({
+        width:  300 ,
+        height:  300 ,
+        type: "svg",
+        data: "%!s(\u003cnil\u003e)",
+        image: "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+        dotsOptions: {
+            color: "#000000",
+            type: "rounded"
+        },
+        backgroundOptions: {
+            color: "#ffffff",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin:  10 
+        }
+    });
+    qrCode.append(document.getElementById("ZTI2ZDA3MTYwNWExNjNhN2I0NWQ5MGQyMDJlMjQxYjkyYzI3MTUwYTk5YzRkZTY4MWYyOWIyOTEyMTAwMGZjMg=="));
+</script>
+<p><a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> versione stampabile</a></p>
+</section>
+<section data-noprocess="" data-shortcode-slide="" id="toc">
+<h2 id="outline">Outline</h2>
+<ol>
+<li>
+<p>Motivation and Context</p>
+<ul>
+<li>the ML workflow</li>
+<li>the GenAI workflow</li>
+<li>need for MLOps, definition, expected benefits</li>
+</ul>
+</li>
+<li>
+<p>MLOps with MLflow</p>
+<ul>
+<li>API, tracking server, backend store, artifact store, setups</li>
+<li>interactive usage (notebook)</li>
+<li>batch usage + project setup</li>
+<li>interoperability with Python libraries</li>
+</ul>
+</li>
+<li>
+<p>End-to-end example for classification</p>
+</li>
+<li>
+<p>End-to-end example for LLM agents</p>
+</li>
+</ol>
+
+</section>
+</section><section>
+<h2 id="what-is-the-goal-of-a-machine-learning-workflow">What is the <em>goal</em> of a Machine Learning workflow?</h2>
+<p>Training a <strong>model</strong> from <em>data</em>, in order to</p>
+<ul>
+<li>do <strong>prediction</strong> on <em>unseen data</em>,
+<ul>
+<li>e.g. spam filter</li>
+</ul>
+</li>
+<li>or <strong>mine</strong> information from it,
+<ul>
+<li>e.g. profiling customers</li>
+</ul>
+</li>
+<li>or <strong>automate</strong> some operation which is <em>hard to code</em> explicitly
+<ul>
+<li>e.g. NPCs in video games</li>
+</ul>
+</li>
+</ul>
+</section><section>
+<h2 id="what-is-the-outcome-of-a-machine-learning-workflow">What is the <em>outcome</em> of a Machine Learning workflow?</h2>
+<ul>
+<li>
+<p>A <strong>software module</strong> (e.g. a Python object) implementing a <em>mathematical function</em>…</p>
+<ul>
+<li>e.g. <code>predict(input_data) -&gt; output_data</code></li>
+</ul>
+</li>
+<li>
+<p>… commonly <strong>tailored</strong> on a specific <em>data schema</em></p>
+<ul>
+<li>e.g. customer information + statistics about shopping history</li>
+</ul>
+</li>
+<li>
+<p>… which <strong>works</strong> sufficiently <strong>well</strong> w.r.t. <em>test data</em></p>
+</li>
+<li>
+<p>… which must commonly be <strong>integrated</strong> into a much larger <em>software system</em></p>
+<ul>
+<li>e.g. a web application, a mobile app, etc.</li>
+</ul>
+</li>
+<li>
+<p>… which may need to be <strong>re-trained</strong> upon <em>data changes</em>.</p>
+</li>
+</ul>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="what-are-the-phases-of-a-machine-learning-workflow">What are the <em>phases</em> of a Machine Learning workflow?</h2>
+<p>The process of producing a ML model is <strong>not</strong> <em>linear</em> <strong>nor</strong> <em>simple</em>:</p>
+<p><img src="./ml-workflow.webp" alt=""></p>
+<ul>
+<li>there could be <strong>many iterations</strong> (up to reaching <em>satisfactory evaluation</em>)</li>
+<li>the whole workflow may be <strong>re-started</strong> upon <em>data changes</em></li>
+<li>updates in the model imply further <strong>integration</strong>/deployment <em>efforts</em> in <em>downstream systems</em></li>
+</ul>
+</section><section>
+<h2 id="activities-in-a-typical-ml-workflow">Activities in a typical ML workflow</h2>
+<ol>
+<li><strong>Problem framing</strong> – define the business/technical goal.</li>
+<li><strong>Data collection</strong> – acquire raw data.</li>
+<li><strong>Data preparation</strong> – clean, label, and transform data.</li>
+<li><strong>Feature engineering</strong> – extract useful variables from data.</li>
+<li><strong>Model training</strong> – apply ML algorithms to produce candidate models.</li>
+<li><strong>Experimentation &amp; evaluation</strong> – compare models, tune hyperparameters, measure performance.</li>
+<li><strong>Model packaging &amp; deployment</strong> – turn the best model into a service or product.</li>
+<li><strong>Monitoring &amp; feedback</strong> – check performance in production, detect drift, gather new data, trigger retraining.</li>
+</ol>
+<blockquote>
+<p>These steps are cyclical, not linear → one often revisits data, retrain, or refine features.</p></blockquote>
+
+</section>
+</section><section>
+<h2 id="how-are-machine-learning-workflows-typically-performed">How are Machine Learning workflows typically performed?</h2>
+
+<div class="container w-100 m-0 p-0">
+    <div class="row "><div class="col "><p><img src="example-jupyter-notebook.png" alt=""></p>
+</div>
+<div class="col "><h3 id="via-notebooks-eg-jupyter">Via Notebooks (e.g. Jupyter)</h3>
+<ul>
+<li>
+<p>✅ Interleave code, textual description, and visualizations</p>
+</li>
+<li>
+<p>✅ Interactive usage, allowing for real-time feedback and adjustments</p>
+</li>
+<li>
+<p>✅ Uniform &amp; easy interface to workstations</p>
+</li>
+<li>
+<p>✅ Easy to save, restore, and share</p>
+</li>
+<li>
+<p>❌ Incentivises manual activities over automatic ones</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section>
+<h2 id="pitfalls-of-manual-work-in-notebooks">Pitfalls of manual work in notebooks</h2>
+<ul>
+<li>Non-reproducibility: hidden state, out-of-order execution, forgotten seeds</li>
+<li>Weak provenance: params, code version, data slice, and metrics not logged</li>
+<li>Human-in-the-loop gating: “print accuracy → eyeball → tweak → rerun”</li>
+<li>Fragile artifacts: models overwritten, files named <code>final_v3.ipynb</code></li>
+<li>Environment drift: “works on my machine” dependencies and data paths</li>
+<li>Collaboration pain: merge conflicts, opaque diffs, reviewability issues</li>
+</ul>
+</section><section>
+<h2 id="example-why-manual-runs-mislead">Example: why manual runs mislead</h2>
+<ul>
+<li>Run 1: random split → train → print accuracy = 0.82</li>
+<li>Tweak hyperparams → rerun only training cell → accuracy = 0.86</li>
+<li>Forgot to fix seed / re-run split → different data, different metric</li>
+<li>No record of params, code, data; “best” model cannot be justified</li>
+</ul>
+<p>Consequences:</p>
+<ul>
+<li>Incomparable results, irreproducible models</li>
+<li>Hard to automate, schedule, or roll back</li>
+<li>No trace from model → code → data → metrics</li>
+</ul>
+</section><section>
+<h2 id="analogies-among-ml-workflows-and-software-engineering-ones">Analogies among ML workflows and Software Engineering ones</h2>
+<ul>
+<li>Both <strong>produce</strong> <em>software modules</em> in the end</li>
+<li>Both involve <strong>iterative processes</strong>, where <em>feedback</em> is used to improve the product</li>
+<li>Both are driven by <strong>tests</strong>/evaluations</li>
+<li>Both may benefit from <strong>automation</strong>
+<ul>
+<li>… and may <em>lose efficiency</em> when activities are performed manually</li>
+</ul>
+</li>
+</ul>
+</section><section>
+<h1 id="talk-is-over">Talk is Over</h1>
+<br>
+<p>Compiled on: 2025-09-04
+ — <a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> printable version</a></p>
+<p><a href="#toc"><i class="fa fa-undo" aria-hidden="true"></i> back to ToC</a></p>
+</section>
+
+  
+
+
+</div>
+      
+
+    </div>
+<script type="text/javascript" src="/talk-2025-mlops/reveal-hugo/object-assign.js"></script>
+
+<a href="/talk-2025-mlops/reveal-js/dist/print/" id="print-location" style="display: none;"></a>
+
+<script type="application/json" id="reveal-hugo-site-params">{"custom_theme":"custom-theme.scss","custom_theme_compile":true,"custom_theme_options":{"enablesourcemap":true,"targetpath":"css/custom-theme.css"},"height":"1080","highlight_theme":"solarized-dark","history":true,"mermaid":[{}],"slide_number":true,"theme":"league","transition":"slide","transition_speed":"fast","width":"1920"}</script>
+<script type="application/json" id="reveal-hugo-page-params">null</script>
+
+<script src="/talk-2025-mlops/reveal-js/dist/reveal.js"></script>
+
+
+  
+  
+  <script type="text/javascript" src="/talk-2025-mlops/reveal-js/plugin/markdown/markdown.js"></script>
+  
+  <script type="text/javascript" src="/talk-2025-mlops/reveal-js/plugin/highlight/highlight.js"></script>
+  
+  <script type="text/javascript" src="/talk-2025-mlops/reveal-js/plugin/zoom/zoom.js"></script>
+  
+  <script type="text/javascript" src="/talk-2025-mlops/reveal-js/plugin/notes/notes.js"></script>
+  
+  
+  <script type="text/javascript" src="/talk-2025-mlops/reveal-js/plugin/notes/notes.js"></script>
+
+
+
+
+<script type="text/javascript">
+  
+  
+  function camelize(map) {
+    if (map) {
+      Object.keys(map).forEach(function(k) {
+        newK = k.replace(/(\_\w)/g, function(m) { return m[1].toUpperCase() });
+        if (newK != k) {
+          map[newK] = map[k];
+          delete map[k];
+        }
+      });
+    }
+    return map;
+  }
+
+  var revealHugoDefaults = { center: true, controls: true, history: true, progress: true, transition: "slide" };
+
+  var revealHugoPlugins = {
+    plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom ]
+   };
+  var revealHugoSiteParams = JSON.parse(document.getElementById('reveal-hugo-site-params').innerHTML);
+  var revealHugoPageParams = JSON.parse(document.getElementById('reveal-hugo-page-params').innerHTML);
+  
+  var options = Object.assign({},
+    camelize(revealHugoDefaults),
+    camelize(revealHugoSiteParams),
+    camelize(revealHugoPageParams),
+    camelize(revealHugoPlugins));
+  Reveal.initialize(options);
+</script>
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+
+
+
+
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+</script>
+
+<script type="text/javascript" id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<script>
+  if (/.*?(\?|&)print-pdf/.test(window.location.toString())) {
+      var ytVideos = document.getElementsByTagName("iframe")
+      for (let i = 0; i < ytVideos.length; i++) {
+          var videoFrame = ytVideos[i]
+          var isYouTube = /^https?:\/\/(www.)youtube\.com\/.*/.test(videoFrame.src)
+          if (isYouTube) {
+              console.log(`Removing ${videoFrame.src}`)
+              var parent = videoFrame.parentElement
+              videoFrame.remove()
+              var p = document.createElement('p')
+              p.append(
+                  document.createTextNode(
+                      "There was an embedded video here, but it is disabled in the printed version of the slides."
+                  )
+              )
+              p.append(document.createElement('br'))
+              p.append(
+                  document.createTextNode(
+                      `Visit instead ${
+                          videoFrame.src
+                      } or ${
+                          videoFrame.src.replace(
+                              /(^https?:\/\/(www.)youtube\.com)\/(embed\/)(\w+).*/,
+                              "https://www.youtube.com/watch?v=$4"
+                          )
+                      }`
+                  )
+              )
+              parent.appendChild(p)
+          }
+      }
+  }
+</script>
+
+
+    
+  
+
+</body></html>
