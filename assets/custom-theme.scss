@@ -167,7 +167,7 @@ section.has-light-background {
 
 .reveal blockquote p::before{
 	content: "";
-	padding-left: 2em;
+	// padding-left: 2em;
 }
 
 .reveal blockquote::after{
@@ -272,7 +272,7 @@ kbd {
 }
 
 .reveal .slide-background:after {
-	content: "Giovanni Ciatto — \"A cosa ci serve l'IA?\" — 2024";
+	content: "Giovanni Ciatto — \"MLOps\" — 2025";
 	position: absolute;
 	bottom: 2.5%;
 	right: 6%;
