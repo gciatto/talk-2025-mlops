@@ -225,7 +225,8 @@
 <li>No trace from model → code → data → metrics</li>
 </ul>
 </section><section>
-<h2 id="analogies-among-ml-workflows-and-software-engineering-ones">Analogies among ML workflows and Software Engineering ones</h2>
+<h2 id="comparison-among-ml-and-ordinary-software-projects">Comparison among ML and ordinary software projects</h2>
+<h3 id="analogies">Analogies</h3>
 <ul>
 <li>Both <strong>produce</strong> <em>software modules</em> in the end</li>
 <li>Both involve <strong>iterative processes</strong>, where <em>feedback</em> is used to improve the product</li>
@@ -236,6 +237,79 @@
 </ul>
 </li>
 </ul>
+
+
+<span class="fragment ">
+  <h3 id="differences">Differences</h3>
+<ul>
+<li>ML projects depend on data (which changes over time)</li>
+<li>Models need training and retraining, not just coding</li>
+<li>Performance may degrade in production (data drift, bias, new environments)</li>
+<li>Many teams are involved (data engineers, ML engineers, domain experts, operations)</li>
+</ul>
+
+</span>
+
+
+
+<span class="fragment ">
+  <blockquote>
+<p>Without a structured process, ML projects may fail to move from notebooks to real-world use.</p></blockquote>
+
+</span>
+
+</section><section>
+<h2 id="machine-learning-operations-mlops">Machine Learning Operations (<a href="https://en.wikipedia.org/wiki/MLOps">MLOps</a>)</h2>
+<blockquote>
+<p>The practice of organizing and <strong>automating</strong> the <em>end-to-end</em> process of building, training, deploying, and maintaining <em>machine-learning models</em></p></blockquote>
+
+
+<span class="fragment ">
+  <h3 id="expected-benefits">Expected benefits</h3>
+<ul>
+<li><strong>Reproducibility</strong> → the same code + same data always gives the same model</li>
+<li><strong>Automation</strong> → repetitive steps (training, testing, deployment) are handled by pipelines</li>
+<li><strong>Scalability</strong> → workflows can handle bigger data and more users</li>
+<li><strong>Monitoring &amp; governance</strong> → models are tracked, evaluated, and kept under control</li>
+<li><strong>Collaboration</strong> → teams work on shared infrastructure, with clear responsibilities</li>
+</ul>
+
+</span>
+
+</section><section>
+<h2 id="how-does-mlops-support-ml-practitioners">How does MLOps support ML practitioners</h2>
+<p>MLOps adds <em>infrastructure</em> + <em>processes</em> + <em>automation</em> to make each step more reliable:</p>
+<ul>
+<li><strong>Data</strong> → <em>version control</em> for datasets, metadata, lineage tracking</li>
+<li><strong>Training</strong> → <em>automated pipelines</em> that reproduce experiments on demand</li>
+<li><strong>Evaluation</strong> → <em>systematic tracking</em> of metrics, logs, and artifacts</li>
+<li><strong>Deployment</strong> → continuous integration &amp; delivery (<em>CI/CD</em>) for ML models, often with <em>model registries</em></li>
+<li><strong>Monitoring</strong> → <em>automated checks</em> for performance, drift, fairness, anomalies</li>
+<li><strong>Collaboration</strong> → <em>shared repositories</em>, environments, and documentation so teams can work together</li>
+</ul>
+</section><section>
+<h2 id="what-may-happen-without-mlops">What may happen without MLOps</h2>
+<ul>
+<li><strong>Data</strong> in <em>ad-hoc spreadsheets</em> or <em>local files</em> (no version control)</li>
+<li><strong>Training</strong> in <em>personal notebooks</em> (hard to reproduce later)</li>
+<li><strong>Model evaluation</strong> is <em>manual</em> and <em>undocumented</em> (hard to compare results)</li>
+<li><strong>Deployment</strong> = <em>copy-paste</em> code or manual sharing of a <em>model file</em></li>
+<li><strong>Monitoring</strong> is much harder → <em>models silently degrade</em></li>
+<li><strong>Collaboration</strong> = <code>“send me your notebook by email”</code></li>
+</ul>
+
+
+<span class="fragment ">
+  <h3 id="consequences">Consequences</h3>
+<ul>
+<li>❌ Fragile, non-reproducible workflows</li>
+<li>❌ Long delays when models need updating</li>
+<li>❌ Difficulty scaling beyond a single researcher</li>
+<li>❌ Low trust from stakeholders (“why did accuracy drop?”)</li>
+</ul>
+
+</span>
+
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
