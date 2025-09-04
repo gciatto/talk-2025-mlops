@@ -164,13 +164,80 @@ Consequences:
 
 ---
 
-## Analogies among ML workflows and Software Engineering ones
+## Comparison among ML and ordinary software projects
+
+### Analogies
 
 * Both __produce__ _software modules_ in the end
 * Both involve __iterative processes__, where _feedback_ is used to improve the product
 * Both are driven by __tests__/evaluations
 * Both may benefit from __automation__
     - ... and may _lose efficiency_ when activities are performed manually
+
+{{% fragment %}}
+### Differences
+
+* ML projects depend on data (which changes over time)
+* Models need training and retraining, not just coding
+* Performance may degrade in production (data drift, bias, new environments)
+* Many teams are involved (data engineers, ML engineers, domain experts, operations)
+{{% /fragment %}}
+
+{{% fragment %}}
+> Without a structured process, ML projects may fail to move from notebooks to real-world use.
+{{% /fragment %}}
+
+--- 
+
+## Machine Learning Operations ([MLOps](https://en.wikipedia.org/wiki/MLOps))
+
+> The practice of organizing and __automating__ the _end-to-end_ process of building, training, deploying, and maintaining _machine-learning models_
+
+{{% fragment %}}
+
+### Expected benefits 
+
+- __Reproducibility__ → the same code + same data always gives the same model
+- __Automation__ → repetitive steps (training, testing, deployment) are handled by pipelines
+- __Scalability__ → workflows can handle bigger data and more users
+- __Monitoring & governance__ → models are tracked, evaluated, and kept under control
+- __Collaboration__ → teams work on shared infrastructure, with clear responsibilities
+
+{{% /fragment %}}
+
+---
+
+## How does MLOps support ML practitioners
+
+MLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more reliable:
+- __Data__ → _version control_ for datasets, metadata, lineage tracking
+- __Training__ → _automated pipelines_ that reproduce experiments on demand
+- __Evaluation__ → _systematic tracking_ of metrics, logs, and artifacts
+- __Deployment__ → continuous integration & delivery (_CI/CD_) for ML models, often with _model registries_
+- __Monitoring__ → _automated checks_ for performance, drift, fairness, anomalies
+- __Collaboration__ → _shared repositories_, environments, and documentation so teams can work together
+
+---
+
+## What may happen without MLOps
+
+- __Data__ in _ad-hoc spreadsheets_ or _local files_ (no version control)
+- __Training__ in _personal notebooks_ (hard to reproduce later)
+- __Model evaluation__ is _manual_ and _undocumented_ (hard to compare results)
+- __Deployment__ = _copy-paste_ code or manual sharing of a _model file_
+- __Monitoring__ is much harder → _models silently degrade_
+- __Collaboration__ = `“send me your notebook by email”`
+
+{{% fragment %}}
+
+### Consequences
+
+- ❌ Fragile, non-reproducible workflows
+- ❌ Long delays when models need updating
+- ❌ Difficulty scaling beyond a single researcher
+- ❌ Low trust from stakeholders (“why did accuracy drop?”)
+
+{{% /fragment %}}
 
 ---
 
