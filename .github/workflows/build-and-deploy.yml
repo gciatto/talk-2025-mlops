@@ -119,7 +119,7 @@ jobs:
         run: shared-slides/makepdfs.rb pages
       - name: Deliver the pdfs
         if: ${{ github.event_name != 'pull_request' && (github.ref_name == 'main' || github.ref_name == 'master') }}
-        uses: ncipollo/release-action@v1.18.0
+        uses: ncipollo/release-action@v1.19.2
         with:
           allowUpdates: true
           artifacts: "*.pdf"
