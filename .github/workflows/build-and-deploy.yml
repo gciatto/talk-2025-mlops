@@ -20,12 +20,15 @@ permissions: {}
 jobs:
   success:
     runs-on: ubuntu-latest
+    concurrency:
+      group: slides-${{ github.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
       # Checkout the repository
       - name: Checkout
-        uses: danysk/action-checkout@0.2.24
+        uses: danysk/action-checkout@0.2.22
       - name: Compute the version of Hugo
         id: hugo
         shell: bash
@@ -52,23 +55,20 @@ jobs:
         run: hugo version
       - name: Remove Hugo Installer
         run: rm hugo.deb
-      # - name: Start SSH session
-      #   uses: luchihoratiu/debug-via-ssh@main
-      #   with:
-      #     NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-      #     SSH_PASS: ${{ secrets.SSH_PASS }}
-      # - name: Setup Ruby
-      #   uses: ruby/setup-ruby@v1.197.0
-      #   with:
-      #     working-directory: shared-slides
-      # - name: Run the preprocessor
-      #   run: shared-slides/preprocess.rb
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.221.0
+        with:
+          working-directory: shared-slides
+      - name: Run the preprocessor
+        run: shared-slides/preprocess.rb
       - name: Build slides with hugo
         run: hugo
       - name: Transform and Inline Mermaid charts
-        uses: cric96/inline-mermaid@1.15.0
+        uses: cric96/inline-mermaid@1.14.1
         with:
           css-file-regex: '^css\\/.*custom.*theme.*\\.css$'
+          root-folder: build
+          config-file: config.toml
       - name: Get branch name
         id: branch-name
         uses: tj-actions/branch-names@v8
@@ -79,3 +79,50 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: build
+
+  create-and-deploy-pdfs:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pdf-slides-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: false
+    needs: 
+      - success
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the PDF creation script
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: recursive
+      - name: Checkout the current website
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          path: pages
+          ref: gh-pages
+      - name: Create version
+        id: version-compute
+        run: echo "version=$(date +"%Y.%m.%d")" >> "$GITHUB_OUTPUT"
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.221.0
+        with:
+          working-directory: shared-slides
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+      - name: Make the pdfs
+        run: shared-slides/makepdfs.rb pages
+      - name: Deliver the pdfs
+        if: ${{ github.event_name != 'pull_request' && (github.ref_name == 'main' || github.ref_name == 'master') }}
+        uses: ncipollo/release-action@v1.15.0
+        with:
+          allowUpdates: true
+          artifacts: "*.pdf"
+          replacesArtifacts: true
+          tag: ${{ steps.version-compute.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
