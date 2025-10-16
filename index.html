@@ -99,7 +99,7 @@
 </section>
 </section><section>
 <h2 id="what-is-the-goal-of-a-machine-learning-workflow">What is the <em>goal</em> of a Machine Learning workflow?</h2>
-<p>Training a <strong>model</strong> from <em>data</em>, in order to</p>
+<p>Training a <strong>model</strong> from <em>data</em>, in order to:</p>
 <ul>
 <li>do <strong>prediction</strong> on <em>unseen data</em>,
 <ul>
@@ -117,6 +117,34 @@
 </ul>
 </li>
 </ul>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="what-is-a-model-in-the-context-of-ml-pt-1">What is a <em>model</em> in the context of ML? (pt. 1)</h2>
+<p>In <em>statistics</em> (and <em>machine learning</em>) a <strong>model</strong> is a <em>mathematical representation</em> of a real-world process
+<br> (commonly attained by <em>fitting</em> a parametric <em>function</em> over a <em>sample</em> of <em>data</em> describing the process)</p>
+<p><img src="./model-statistics.webp" alt=""></p>
+<p>e.g.: <strong>$f(x) = \beta_0 + \beta_1 x $</strong> where <strong>$f$</strong> is the amount of minutes played, and <strong>$x$</strong> is the age</p>
+</section><section>
+<h2 id="what-is-a-model-in-the-context-of-ml-pt-2">What is a <em>model</em> in the context of ML? (pt. 2)</h2>
+<p>E.g. <strong>neural networks</strong> (NN) are a popular <em>family</em> of models</p>
+<div class="container w-100 m-0 p-0">
+    <div class="row "><div class="col "><img src="./neuron.png" alt="Functioning of a single neuron" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+<p>Single neuron</p>
+</div>
+<div class="col "><img src="./neural-network.png" alt="Functioning of a feed-forward neural network" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+<p>(Feed-forward)
+<br>
+Neural network $\equiv$ cascade of <em>layers</em></p>
+</div>
+<div class="col "><img src="./nn-zoo.png" alt="Many sorts of neural architectures" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+<p><a href="https://www.asimovinstitute.org/neural-network-zoo/">Many admissible architectures</a>, serving disparate purposes</p>
+</div>
+</div>
+</div>
+
+</section>
 </section><section>
 <h2 id="what-is-the-outcome-of-a-machine-learning-workflow">What is the <em>outcome</em> of a Machine Learning workflow?</h2>
 <ul>
@@ -160,14 +188,14 @@
 </section><section>
 <h2 id="activities-in-a-typical-ml-workflow">Activities in a typical ML workflow</h2>
 <ol>
-<li><strong>Problem framing</strong> – define the business/technical goal.</li>
-<li><strong>Data collection</strong> – acquire raw data.</li>
-<li><strong>Data preparation</strong> – clean, label, and transform data.</li>
-<li><strong>Feature engineering</strong> – extract useful variables from data.</li>
-<li><strong>Model training</strong> – apply ML algorithms to produce candidate models.</li>
-<li><strong>Experimentation &amp; evaluation</strong> – compare models, tune hyperparameters, measure performance.</li>
-<li><strong>Model packaging &amp; deployment</strong> – turn the best model into a service or product.</li>
-<li><strong>Monitoring &amp; feedback</strong> – check performance in production, detect drift, gather new data, trigger retraining.</li>
+<li><strong>Problem framing</strong>: define the business/technical goal</li>
+<li><strong>Data collection</strong>: acquire raw data</li>
+<li><strong>Data preparation</strong>: clean, label, and transform data</li>
+<li><strong>Feature engineering</strong>: extract useful variables from data</li>
+<li><strong>Model training</strong>: apply ML algorithms to produce candidate models</li>
+<li><strong>Experimentation &amp; evaluation</strong>: compare models, tune hyperparameters, measure performance</li>
+<li><strong>Model packaging &amp; deployment</strong>: turn the best model into a service or product</li>
+<li><strong>Monitoring &amp; feedback</strong>: check performance in production, detect drift, gather new data, trigger retraining</li>
 </ol>
 <blockquote>
 <p>These steps are cyclical, not linear → one often revisits data, retrain, or refine features.</p>
@@ -204,12 +232,12 @@
 </section><section>
 <h2 id="pitfalls-of-manual-work-in-notebooks">Pitfalls of manual work in notebooks</h2>
 <ul>
-<li>Non-reproducibility: hidden state, out-of-order execution, forgotten seeds</li>
-<li>Weak provenance: params, code version, data slice, and metrics not logged</li>
-<li>Human-in-the-loop gating: “print accuracy → eyeball → tweak → rerun”</li>
-<li>Fragile artifacts: models overwritten, files named <code>final_v3.ipynb</code></li>
-<li>Environment drift: “works on my machine” dependencies and data paths</li>
-<li>Collaboration pain: merge conflicts, opaque diffs, reviewability issues</li>
+<li><strong>Non-reproducibility</strong>: hidden state, out-of-order execution, forgotten seeds</li>
+<li><strong>Weak provenance</strong>: params, code version, data slice, and metrics not logged</li>
+<li><strong>Human-in-the-loop gating</strong>: “print accuracy → eyeball → tweak → rerun”</li>
+<li><strong>Fragile artifacts</strong>: models overwritten, files named <code>final_v3.ipynb</code></li>
+<li><strong>Environment drift</strong>: “works on my machine” dependencies and data paths</li>
+<li><strong>Collaboration pain</strong>: merge conflicts, opaque diffs, reviewability issues</li>
 </ul>
 </section><section>
 <h2 id="example-why-manual-runs-mislead">Example: why manual runs mislead</h2>
@@ -219,12 +247,18 @@
 <li>Forgot to fix seed / re-run split → different data, different metric</li>
 <li>No record of params, code, data; “best” model cannot be justified</li>
 </ul>
-<p>Consequences:</p>
+
+
+<span class="fragment ">
+  <h3 id="consequences">Consequences</h3>
 <ul>
 <li>Incomparable results, irreproducible models</li>
 <li>Hard to automate, schedule, or roll back</li>
 <li>No trace from model → code → data → metrics</li>
 </ul>
+
+</span>
+
 </section><section>
 <h2 id="comparison-among-ml-and-ordinary-software-projects">Comparison among ML and ordinary software projects</h2>
 <h3 id="analogies">Analogies</h3>
@@ -243,10 +277,10 @@
 <span class="fragment ">
   <h3 id="differences">Differences</h3>
 <ul>
-<li>ML projects depend on data (which changes over time)</li>
-<li>Models need training and retraining, not just coding</li>
-<li>Performance may degrade in production (data drift, bias, new environments)</li>
-<li>Many teams are involved (data engineers, ML engineers, domain experts, operations)</li>
+<li>ML projects depend on <em>data</em> (which <em>changes</em> over time)</li>
+<li>Models need <em>training</em> and <em>retraining</em>, not just coding</li>
+<li>Performance may <em>degrade</em> in production (data drift, bias, new environments)</li>
+<li>Many <em>different expertises</em> are involved (data engineers, software engineers, domain experts, operations)</li>
 </ul>
 
 </span>
@@ -255,7 +289,7 @@
 
 <span class="fragment ">
   <blockquote>
-<p>Without a structured process, ML projects may fail to move from notebooks to real-world use.</p>
+<p>No structured process $\implies$ ML projects may fail to move from notebooks to real-world use</p>
 </blockquote>
 
 </span>
@@ -272,9 +306,10 @@
 <ul>
 <li><strong>Reproducibility</strong> → the same code + same data always gives the same model</li>
 <li><strong>Automation</strong> → repetitive steps (training, testing, deployment) are handled by pipelines</li>
-<li><strong>Scalability</strong> → workflows can handle bigger data and more users</li>
+<li><strong>Scalability</strong> → easier to scale up the training process to more data, bigger models, or more computing resources</li>
 <li><strong>Monitoring &amp; governance</strong> → models are tracked, evaluated, and kept under control</li>
 <li><strong>Collaboration</strong> → teams work on shared infrastructure, with clear responsibilities</li>
+<li><strong>Versioning</strong> → models, data, and code are versioned and traceable</li>
 </ul>
 
 </span>
@@ -291,7 +326,7 @@
 <li><strong>Collaboration</strong> → <em>shared repositories</em>, environments, and documentation so teams can work together</li>
 </ul>
 </section><section>
-<h2 id="what-may-happen-without-mlops">What may happen without MLOps</h2>
+<h2 id="what-may-happen-without-mlops">What may happen <strong>without</strong> MLOps</h2>
 <ul>
 <li><strong>Data</strong> in <em>ad-hoc spreadsheets</em> or <em>local files</em> (no version control)</li>
 <li><strong>Training</strong> in <em>personal notebooks</em> (hard to reproduce later)</li>
@@ -313,6 +348,236 @@
 
 </span>
 
+</section><section>
+<h1 id="what-about-generative-ai-workflows">What about Generative AI workflows?</h1>
+</section><section>
+<h2 id="what-is-the-goal-of-a-generative-ai-workflow">What is the <em>goal</em> of a Generative AI workflow?</h2>
+<p>Engineering <em>prompts</em>, <em>tools</em>, <em>vector stores</em>, and <em>agents</em> to constrain and govern the behavior of <strong>pre-trained</strong> (<em>foundation</em>) models, in order to:</p>
+<ul>
+<li><strong>generate</strong> contents (text, images, code, etc.) for a specific purpose
+<ul>
+<li>e.g. bring unstructured data into a particular format</li>
+<li>e.g. produce summaries, reports, highlights</li>
+</ul>
+</li>
+<li><strong>interpret</strong> unstructured data and <em>grasp information</em> from it
+<ul>
+<li>e.g. extract entities, relations, sentiments</li>
+<li>e.g. answer questions about a document</li>
+</ul>
+</li>
+<li><strong>automate</strong> data-processing tasks which are <em>hard to code</em> explicitly
+<ul>
+<li>e.g. the task is ill-defined (<code>write an evaluation paragraph for each student's work</code>)</li>
+<li>e.g. the task requires mining information from unstructured data (<code>find the parties involved in this contract</code>)</li>
+<li>e.g. the task is complex yet too narrow to allow for general purpose coding (<code>plan a vacation itinerary based on user preferences</code>)</li>
+</ul>
+</li>
+<li><strong>interact</strong> with users via <em>natural language</em>
+<ul>
+<li>e.g. chatbots, virtual assistants</li>
+</ul>
+</li>
+</ul>
+</section><section>
+<h2 id="lets-explain-the-nomenclature">Let’s explain the nomenclature</h2>
+<ul>
+<li>
+<p><strong>Pre-trained <u>foundation</u> models</strong> (PFM): large neural-networks trained on massive datasets to learn general skills (e.g. ‘understanding’ and generating text, images, code)</p>
+<ul>
+<li>e.g. GPT, PaLM, LLaMA, etc.</li>
+</ul>
+</li>
+<li>
+<p><strong>Prompts</strong>: carefully <em>crafted textual inputs</em> that guide some PFM to produce <em>desired outputs</em></p>
+<ul>
+<li>prompt <strong>templates</strong> are prompts with <em>named placeholders</em> to be filled with specific data at runtime
+<ul>
+<li>e.g. <code>Write a summary of the following article: {article_text}</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Tools</strong>: external <em>software components</em> (e.g. APIs, databases, search engines) that can be <em>invoked</em> by PFMs to perform specific tasks or retrieve information</p>
+<ul>
+<li>e.g. a calculator API, a weather API, a database query interface</li>
+</ul>
+</li>
+<li>
+<p><strong>Vector stores</strong>: specialized databases that store and retrieve <em>high-dimensional vectors</em> (embeddings) for the sake of <em>information retrieval</em> via <em>similarity search</em></p>
+<ul>
+<li>e.g. to support <em>retrieval-augmented generation</em> (RAG)</li>
+</ul>
+</li>
+<li>
+<p><strong>Agents</strong>: software systems that <em>orchestrate</em> the interaction between PFMs and tools, enabling dynamic decision-making and task execution based on the context and user input</p>
+<ul>
+<li>e.g. a chatbot that uses a PFM for conversation and invokes a weather API when asked about the weather</li>
+<li>e.g. an assistant that uses a PFM to understand user requests and a database to fetch relevant information</li>
+</ul>
+</li>
+</ul>
+</section><section>
+<h2 id="what-are-the-outcomes-of-a-generative-ai-workflow">What are the <em>outcomes</em> of a Generative AI workflow?</h2>
+<ol start="0">
+<li>
+<p>FM are commonly <u>not</u> produced in-house, but rather <em>accessed</em> via APIs… yet the choice of <strong>what model(s) to use</strong> is crucial</p>
+<ul>
+<li>must be available, configured, and most commonly imply <em>costs</em> (per call, per token, etc.)</li>
+</ul>
+</li>
+<li>
+<p>A set of <strong>prompt templates</strong> (text files, or code snippets) that are known to work well for the tasks at hand</p>
+<ul>
+<li>commonly assessed via semi-automatic <em>evaluations</em> on a <em>validation set</em> of inputs</li>
+</ul>
+</li>
+<li>
+<p>A set of <strong>tool servers</strong> implementing the <a href="https://modelcontextprotocol.io/docs/getting-started/intro">MCP protocol</a> so that tools can be <em>invoked</em> by PFMs</p>
+<ul>
+<li>these are <em>software modules</em>, somewhat similar to ordinary Web services, offering one endpoint per tool</li>
+</ul>
+</li>
+<li>
+<p>A set of <strong>agents</strong>, implementing the logic to orchestrate the interaction between PFMs and tools</p>
+<ul>
+<li>these are <em>software modules</em>, commonly implemented via libraries such as <a href="https://python.langchain.com/en/latest/index.html">LangChain</a> or <a href="https://gpt-index.readthedocs.io/en/latest/">LlamaIndex</a></li>
+</ul>
+</li>
+<li>
+<p>A set of <strong>vector stores</strong> (if needed), populated with relevant data, and accessible by the agents</p>
+<ul>
+<li>there are <em>software modules</em>, somewhat similar to ordinary DBMS, offering CRUD operations on data chunks <em>indexed by</em> their <em>embeddings</em></li>
+</ul>
+</li>
+</ol>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="what-are-the-phases-of-a-genai-workflow">What are the <em>phases</em> of a GenAI workflow?</h2>
+<p>(Similar to the ML workflow in the sense that the goal is to process data, but different in many details e.g. <em>no training</em> is involved)</p>
+<p><img src="./genai-workflow.png" alt=""></p>
+<ul>
+<li>there could be <strong>many iterations</strong> (e.g. for PFM selection, and prompt tuning)</li>
+<li>the whole workflow may be <strong>re-started</strong> upon <em>data changes</em>, or <em>task changes</em>, or new <em>PFM availability</em></li>
+<li>the <strong>interplay</strong> between prompts, models, tasks, and data may need to be <em>monitored</em> and <em>adjusted</em> continuously</li>
+<li>the <strong>data-flow</strong> between components (agents, PFM, tools, vector stores) may need to be <em>tracked</em> for the sake of <em>debugging</em> and <em>monitoring</em></li>
+</ul>
+</section><section>
+<h2 id="peculiar-activities-in-a-typical-genai-workflow">Peculiar activities in a typical GenAI workflow</h2>
+<ol>
+<li>
+<p><strong>Foundation model selection</strong>: choose the most suitable pre-trained model(s) based on task requirements, performance, cost, data protection, and availability</p>
+<ul>
+<li>implies trying out prompts (even manually) on different models</li>
+</ul>
+</li>
+<li>
+<p><strong>Prompt engineering</strong>: design, test, and refine prompt templates to elicit the desired responses</p>
+<ul>
+<li>implies engineering variables, lengths, formats, contents, etc</li>
+</ul>
+</li>
+<li>
+<p><strong>Evaluations</strong>: establish assertions and metrics to assess PFM responses to prompts (attained by instantiating templates over actual data)</p>
+<ul>
+<li>somewhat similar to <em>unit tests</em> in ordinary software</li>
+<li>important when automatic, as they allow quick evaluations on prompt/model combinations</li>
+</ul>
+</li>
+<li>
+<p><strong>Tracking</strong> the <em>data-flow</em> between components (agents, PFM, tools, vector stores) to monitor <em>costs</em>, <em>latency</em>, and to <em>debug</em> unexpected behaviors</p>
+<ul>
+<li>also useful for the sake of <em>auditing</em> and <em>governance</em></li>
+</ul>
+</li>
+</ol>
+
+</section>
+</section><section>
+<h2 id="llm-operations-llmops">LLM Operations (<a href="https://www.databricks.com/it/glossary/llmops">LLMOps</a>)</h2>
+<blockquote>
+<p>The practice of organizing and <strong>automating</strong> the <em>end-to-end</em> process of building, evaluating, deploying, and maintaining <em>GenAI applications</em></p>
+</blockquote>
+<br>
+
+
+<span class="fragment ">
+  <h4 id="in-a-nutshell-mlops-for-genai">In a nutshell: <strong>MLOps for GenAI</strong></h4>
+
+</span>
+
+<br>
+
+
+<span class="fragment ">
+  <h3 id="expected-benefits">Expected benefits</h3>
+<ul>
+<li><strong>Systematicity</strong> → structured processes to manage prompts, tools, and agents</li>
+<li><strong>Efficiency</strong> → reuse of components, templates, and evaluations</li>
+<li><strong>Scalability</strong> → easier to test, and update individual components (prompt templates, tools, agents)</li>
+<li><strong>Monitoring &amp; governance</strong> → components are tracked, evaluated, and kept under control</li>
+</ul>
+
+</span>
+
+</section><section>
+<h2 id="how-does-llmops-support-genai-practitioners">How does LLMOps support GenAI practitioners</h2>
+<p>LLOps adds <em>infrastructure</em> + <em>processes</em> + <em>automation</em> to make each step more reliable:</p>
+<ul>
+<li><strong>Foundation models</strong> → <em>catalogs</em> of available models, with metadata on capabilities, costs, and usage policies</li>
+<li><strong>Provider Gateways</strong> → standardized APIs to access different PFM providers (e.g. OpenAI, HuggingFace) uniformly, without code rewrites</li>
+<li><strong>Prompt engineering</strong> → <em>version control</em> for prompt templates, systematic testing frameworks</li>
+<li><strong>Tool integration</strong> → <em>standardized protocols</em> (e.g. MCP) and libraries to connect tools with PFMs + <em>gateway technologies</em> to aggregate multiple tools</li>
+<li><strong>Agents</strong> → <em>provider-agnostic libraries</em> and frameworks (e.g. LangChain) to build, manage, and orchestrate agents</li>
+<li><strong>Vector stores</strong> → <em>standardized interfaces</em> to store and retrieve data chunks via embeddings, with support for <em>multiple backend</em> DBMS</li>
+<li><strong>Evaluation &amp; monitoring</strong> → <em>automated</em> frameworks to run <em>evaluations</em>, <em>track performance</em>, and <em>monitor costs</em></li>
+</ul>
+</section><section>
+<h2 id="what-may-happen-without-llmops">What may happen <strong>without</strong> LLMOps</h2>
+<ul>
+<li>
+<p><strong>Foundation models</strong> are <em>hard-coded</em> in the application</p>
+<ul>
+<li>making it difficult to switch providers or models</li>
+</ul>
+</li>
+<li>
+<p><strong>Prompt templates</strong> are <em>scattered</em> in code or documents</p>
+<ul>
+<li>making it hard to track changes or reuse them</li>
+</ul>
+</li>
+<li>
+<p><strong>Tools</strong> are <em>manually integrated</em>, leading to:</p>
+<ul>
+<li>brittle connections,</li>
+<li>lack of observability,</li>
+<li>maintenance challenges</li>
+</ul>
+</li>
+<li>
+<p><strong>Agents</strong> are <em>ad-hoc scripts</em> that mix logic, PFM calls, and tool invocations</p>
+<ul>
+<li>making them hard to debug, extend or compose</li>
+</ul>
+</li>
+<li>
+<p><strong>Vector stores</strong> are <em>tightly coupled</em> with specific DBMS</p>
+<ul>
+<li>making it hard to migrate or scale</li>
+</ul>
+</li>
+<li>
+<p><strong>Evaluation &amp; monitoring</strong> are <em>manual</em> and <em>sporadic</em> leading to undetected issues, cost overruns, and loss of trust</p>
+</li>
+</ul>
+</section><section>
+<h1 id="mlops-and-llmops-with-mlflow">MLOps and LLMOps with <a href="https://mlflow.org/">MLflow</a></h1>
+</section><section>
+<p>TBD</p>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
