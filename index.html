@@ -200,6 +200,28 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <blockquote>
 <p>These steps are cyclical, not linear → one often revisits data, retrain, or refine features.</p>
 </blockquote>
+</section><section>
+<h2 id="example-of-ml-workflow">Example of ML workflow</h2>
+<blockquote>
+<p>Forecast footfall/visits to some office by day/time</p>
+</blockquote>
+<ul>
+<li>useful for staffing and opening hours planning</li>
+</ul>
+<ol>
+<li><strong>Problem framing</strong>: model as a <em>regression</em> task or <em>time-series forecasting</em> task?</li>
+<li><strong>Data collection</strong>: gather <em>historical</em> footfall <em>data</em>, calendar events, weather data, etc.</li>
+<li><strong>Data preparation</strong>: clean and preprocess data, handle missing values, etc.</li>
+<li><strong>Feature engineering</strong>: create <em>relevant features</em> (e.g. day of week, holidays, weather conditions)</li>
+<li><strong>Model training</strong>: apply ML algorithms to <em>produce candidate models</em></li>
+<li><strong>Experimentation &amp; evaluation</strong>: <em>compare models</em>, tune hyperparameters, measure performance</li>
+<li><strong>Model packaging &amp; deployment</strong>: turn the <em>best model</em> into a <em>service</em> or product</li>
+<li><strong>Monitoring &amp; feedback</strong>: <em>monitor performance</em> in production, detect <em>drifts</em>, gather new data, trigger <em>retraining</em>
+<ul>
+<li>new offices or online services may change footfall patterns</li>
+</ul>
+</li>
+</ol>
 
 </section>
 </section><section>
@@ -494,6 +516,76 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </ul>
 </li>
 </ol>
+</section><section>
+<h2 id="example-of-genai-workflow-pt-1">Example of GenAI workflow (pt. 1)</h2>
+<blockquote>
+<p>Support public officers in managing tenders through a GenAI assistant that understands and compares procurement decisions transparently.</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>Problem Framing</strong>:</p>
+<ul>
+<li><em>Content Generation</em>: draft and justify <em>comparisons</em> among suppliers’ offers vs. technical specs</li>
+<li><em>Interpretation</em>: understand regulatory documents and technical language</li>
+<li><em>Automation</em>: retrieve relevant laws, norms, and prior tender examples</li>
+<li><em>Interaction</em>: enable officers to query and validate results through natural language</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Collection</strong>: past tenders’ technical specifications, acts, etc; regulatory documents, etc.</p>
+</li>
+<li>
+<p><strong>Data Preparation</strong>:</p>
+<ul>
+<li>devise useful data schema &amp; extract relevant data from documents</li>
+<li>anonymize sensitive info (suppliers, personal data)</li>
+<li>segment documents and index by topic (law, SLA, price table, etc.)</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="example-of-genai-workflow-pt-2">Example of GenAI workflow (pt. 2)</h2>
+<ol start="4">
+<li>
+<p><strong>Prompt Engineering</strong>:</p>
+<ol>
+<li>design prompt templates for comparison, justification, and Q&amp;A
+<ul>
+<li>use role-based system prompts (<code>You are a procurement evaluator…</code>)</li>
+</ul>
+</li>
+<li>allocate placeholders for RAG-retrieved data chunks</li>
+<li>iterate on template design based on manual tests</li>
+</ol>
+</li>
+<li>
+<p><strong>Foundation Model Selection</strong>: multi-lingual? specialized in legal/technical text? cost constraints? support for tools?</p>
+</li>
+<li>
+<p><strong>Vector stores</strong>: storing embeddings for tender documents &amp; specs, legal texts &amp; guidelines, previous evaluation, templates</p>
+<ol>
+<li>choose embedding model, chunking strategy, and populate vector store</li>
+<li>engineer retrieval strategies to fetch relevant chunks</li>
+</ol>
+</li>
+<li>
+<p><strong>Tools</strong>:</p>
+<ul>
+<li>regulation lookup API + tender database query API</li>
+<li>report generation out of document templates</li>
+<li>automate scoring calculations via spreadsheet or Python scripts generation</li>
+</ul>
+</li>
+<li>
+<p><strong>Agents</strong>:</p>
+<ol>
+<li>exploit LLM to extract structured check-lists out of technical specs</li>
+<li>orchestrate RAG, tool invocations, and prompt templates to score each offer</li>
+<li>generate comparison reports</li>
+<li>…</li>
+</ol>
+</li>
+</ol>
 
 </section>
 </section><section>
@@ -577,7 +669,32 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </section><section>
 <h1 id="mlops-and-llmops-with-mlflow">MLOps and LLMOps with <a href="https://mlflow.org/">MLflow</a></h1>
 </section><section>
-<p>TBD</p>
+<h2 id="what-is-mlflow">What is MLflow? <a href="https://mlflow.org/">https://mlflow.org/</a></h2>
+<p><img src="./mlflow-logo.webp" alt=""></p>
+<blockquote>
+<p>An <em>open-source</em> Python framework for <strong>MLOps</strong> and (most recently) <strong>LLMOps</strong></p>
+</blockquote>
+<ul>
+<li>usable either in-cloud (e.g. via <a href="https://www.databricks.com/">Databricks</a>) or on-premises (self-hosted)
+<ul>
+<li>we’ll see the latter setup</li>
+</ul>
+</li>
+</ul>
+
+
+<span class="fragment ">
+  <h3 id="outline">Outline</h3>
+<ol>
+<li>First, we focus on how to use MLflow for the sake of <em>MLOps</em></li>
+<li>Then, we show how MLflow can be used for <em>LLMOps</em> as well</li>
+</ol>
+
+</span>
+
+</section><section>
+<h2 id="mlflow-for-mlops-main-components">MLflow for MLOps: main components</h2>
+<p><img src="./mlflow-components-mlops.png" alt=""></p>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
