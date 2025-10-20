@@ -153,6 +153,23 @@ The process of producing a ML model is __not__ _linear_ __nor__ _simple_:
 
 > These steps are cyclical, not linear → one often revisits data, retrain, or refine features.
 
+---
+
+## Example of ML workflow
+
+> Forecast footfall/visits to some office by day/time
++ useful for staffing and opening hours planning
+
+1. __Problem framing__: model as a _regression_ task or _time-series forecasting_ task?
+2. __Data collection__: gather _historical_ footfall _data_, calendar events, weather data, etc.
+3. __Data preparation__: clean and preprocess data, handle missing values, etc.
+4. __Feature engineering__: create _relevant features_ (e.g. day of week, holidays, weather conditions)
+5. __Model training__: apply ML algorithms to _produce candidate models_
+6. __Experimentation & evaluation__: _compare models_, tune hyperparameters, measure performance
+7. __Model packaging & deployment__: turn the _best model_ into a _service_ or product
+8. __Monitoring & feedback__: _monitor performance_ in production, detect _drifts_, gather new data, trigger _retraining_
+    + new offices or online services may change footfall patterns
+
 {{% /section %}}
 
 ---
@@ -375,6 +392,52 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 4. __Tracking__ the _data-flow_ between components (agents, PFM, tools, vector stores) to monitor _costs_, _latency_, and to _debug_ unexpected behaviors
     * also useful for the sake of _auditing_ and _governance_
 
+---
+
+## Example of GenAI workflow (pt. 1)
+
+> Support public officers in managing tenders through a GenAI assistant that understands and compares procurement decisions transparently.
+
+1. __Problem Framing__:
+    - _Content Generation_: draft and justify _comparisons_ among suppliers’ offers vs. technical specs
+    - _Interpretation_: understand regulatory documents and technical language
+    - _Automation_: retrieve relevant laws, norms, and prior tender examples
+    - _Interaction_: enable officers to query and validate results through natural language
+
+2. __Data Collection__: past tenders' technical specifications, acts, etc; regulatory documents, etc.
+
+3. __Data Preparation__: 
+    - devise useful data schema & extract relevant data from documents
+    - anonymize sensitive info (suppliers, personal data)
+    - segment documents and index by topic (law, SLA, price table, etc.)
+
+---
+
+## Example of GenAI workflow (pt. 2)
+
+4. __Prompt Engineering__: 
+    1. design prompt templates for comparison, justification, and Q&A
+        * use role-based system prompts (`You are a procurement evaluator…`)
+    2. allocate placeholders for RAG-retrieved data chunks
+    3. iterate on template design based on manual tests
+
+5. __Foundation Model Selection__: multi-lingual? specialized in legal/technical text? cost constraints? support for tools?
+
+6. __Vector stores__: storing embeddings for tender documents & specs, legal texts & guidelines, previous evaluation, templates
+    1. choose embedding model, chunking strategy, and populate vector store
+    2. engineer retrieval strategies to fetch relevant chunks
+
+8. __Tools__: 
+    * regulation lookup API + tender database query API
+    * report generation out of document templates
+    * automate scoring calculations via spreadsheet or Python scripts generation
+
+9. __Agents__: 
+    1. exploit LLM to extract structured check-lists out of technical specs
+    2. orchestrate RAG, tool invocations, and prompt templates to score each offer
+    3. generate comparison reports 
+    4. ...
+
 {{% /section %}}
 
 ---
@@ -443,7 +506,27 @@ LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more 
 
 ---
 
-TBD
+## What is MLflow? <https://mlflow.org/>
+
+![](./mlflow-logo.webp) 
+
+> An _open-source_ Python framework for __MLOps__ and (most recently) __LLMOps__
+* usable either in-cloud (e.g. via [Databricks](https://www.databricks.com/)) or on-premises (self-hosted)
+    + we'll see the latter setup
+
+{{% fragment %}}
+### Outline 
+
+1. First, we focus on how to use MLflow for the sake of _MLOps_
+2. Then, we show how MLflow can be used for _LLMOps_ as well
+
+{{% /fragment %}}
+
+---
+
+## MLflow for MLOps: main components
+
+![](./mlflow-components-mlops.png)
 
 ---
 
