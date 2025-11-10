@@ -524,9 +524,277 @@ LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more 
 
 ---
 
-## MLflow for MLOps: main components
+## MLflow for MLOps: main components pt. 1
 
 ![](./mlflow-components-mlops.png)
+
+{{% multicol %}}
+{{% col %}}
+### Provides
+
+- _UI_ to visualize and monitor experiments
+- Facilities to _evaluate_ ML models (metrics and charts)
+- Python API and command-line support for _ML operations_
+{{% /col %}}
+{{% col %}}
+### How
+
+- by _tracking_ metadata about datasets, experiments, and models
+- by _serializing_ and _storing_ models, charts, predictions, metrics, etc.
+- by facilitating _deployment_ of models _as services_
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## MLflow for MLOps: main components pt. 2
+
+![](./mlflow-components-mlops-2.jpg)
+
+---
+
+## MLflow's common set-ups
+
+![](mlflow-architecture-mlops.png)
+
+{{% multicol %}}
+{{% col %}}
+1. Solo development (serverless)
+{{% /col %}}
+{{% col %}}
+2. Solo development (local server + remote store)
+{{% /col %}}
+{{% col %}}
+3. Team work (remote server)
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## MLflow's complex set-up
+
+Notice that, in set-up 3, there could be up to three servers involved:
+
+1. the __Backend Store__ server (a relational DBMS, e.g. PostgreSQL, MySQL, SQLite, etc.) to store _metadata_
+2. the __Artifact Store__ server (e.g. S3, Azure Blob Storage, etc.) to store _artifacts_ via some file-system interface
+3. the __MLflow Tracking Server__ to provide the UI and API endpoints 
+    + this is mediating the interaction between users and the two stores
+---
+
+## MLflow's functioning overview
+
+### Assumptions
+
+1. Some Python code is in place to perform ML tasks (via common libraries such as `scikit-learn`, `TensorFlow`, `PyTorch`, etc.)
+2. The code is using the MLflow Python API to log metadata about experiments, datasets, models, metrics, etc.
+
+{{% fragment %}}
+### Workflow
+
+0. Start the Python code
+
+1. The MLflow Python API invoked in the code will actually log all relevant _metadata_ and _artifacts_ as the code runs
+    - __metadata__ $\approx$ experiment id, run id, timings, data schemas, input parameters, hyper-parameters, metric values, etc.
+    - __artifact__ $\approx$ dataset, model, chart, etc.
+
+2. Metadata and artifacts may be stored (depending on the configuration):
+    - on the local file system 
+    - on a remote backend and artifact store
+
+{{% /fragment %}}
+
+---
+
+## MLflow usage remarks
+
+- __Assumption 2__ may require additional effort from the developer(s)
+    + this is kept minimal via [auto-logging](https://mlflow.org/docs/3.3.1/ml/tracking/autolog/) available for most common ML libraries
+
+- __No big constraint__ on how to organize the Python code it-self...
+
+
+- ... but many __benefits__ (_automatization_, reproducibility) may come from organizing the code as an [MLflow Project](https://mlflow.org/docs/latest/ml/projects/)
+    + $\implies$ _decomposing_ the _code_ into multiple scripts
+    + $\implies$ thinking about the _parametric aspects_ of the experiment, and account for _command-line arguments_ accordingly
+    + $\implies$ thinking about the _environment_ where the code will run (e.g. dependencies, libraries, etc.)
+    + we'll see this aspect later
+
+---
+
+{{% section %}}
+
+## A taste of MLflow's Tracking API (pt. 1)
+
+1. Install MLflow into your Python environment
+    ```bash
+    pip install mlflow
+    ```
+
+2. Consider the following dummy script:
+    ```python
+    import sys # to read command-line arguments
+    import tempfile # to save generated files into temporary directories
+    import mlflow # to use MLflow functionalities
+    from random import Random # to generate random numbers with controlled seed
+
+    # Set the experiment name (creates it if it does not exist)
+    mlflow.set_experiment(experiment_name="logging_example")
+    # Read a seed from command-line arguments (default: 42)
+    seed = int(sys.argv[1]) if len(sys.argv) > 1 else 42
+    rand = Random(seed)
+    # Start an MLflow run, naming it "example_run" (otherwise random name is generated)
+    with mlflow.start_run(run_name="example_run") as run:
+        # notice that experiments are runs are identified by their numeric IDs
+        print(f"Started MLflow run with ID: {run.info.run_id} in experiment ID: {run.info.experiment_id}")
+        # Log a parameter "seed" with the given seed value
+        mlflow.log_param("seed", seed)
+        # Let's simulate 5 different metric scores to be logged
+        for i in range(5):
+            mlflow.log_metric(f"random_{i}", rand.random())
+        mlflow.log_metric("random_4", rand.randint(1, 10)) # overwrite last metric
+        # Create and log an example artifact (a text file, generated inside temporaty directory)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            file_path = f"{tmpdir}/example.txt"
+            with open(file_path, "w") as f:
+                f.write("This is an example artifact.")
+            mlflow.log_artifact(file_path, artifact_path="examples")
+        # Simulate an error in the run if the seed parameter is odd
+        if seed % 2 == 1:
+            raise ValueError("Let the run fail for odd seeds!")
+        print("Run completed successfully.")
+    ```
+
+--- 
+
+## A taste of MLflow's Tracking API (pt. 2)
+
+3. Let's run the experiment _twice_, with __different seeds__:
+    ```bash
+    python logging_example.py 42
+    python logging_example.py 43
+    ```
+
+4. The __1st__ _successful_ run shall output something like:
+    ```text
+    2025/11/10 11:44:49 INFO mlflow.tracking.fluent: Experiment with name 'logging_example' does not exist. Creating a new experiment.
+    Started MLflow run with ID: 378f18735f6d4abd8abeba76f4029bea in experiment ID: 931233098002846893
+    ```
+
+5. The __2nd__ _failing_ run shall output something like:
+    ```text
+    Started MLflow run with ID: 9b52b7b7416e423ca9c878fba9b5c667 in experiment ID: 931233098002846893
+    Traceback (most recent call last):
+    File "/home/gciatto/Work/Code/example-mlops/mlflow_tracking.py", line 28, in <module>
+        raise ValueError("Let the run fail for odd seeds!")
+    ValueError: Let the run fail for odd seeds!
+    ```
+
+6. Look at your file system, notice that a new `mlruns/` folder has appeared next to Python script:
+    ```text
+    mlruns
+    ├── 931233098002846893
+    │   ├── 378f18735f6d4abd8abeba76f4029bea
+    │   │   ├── artifacts
+    │   │   │   └── examples
+    │   │   │       └── example.txt
+    │   │   ├── meta.yaml
+    │   │   ├── metrics
+    │   │   │   ├── random_0
+    │   │   │   ├── random_1
+    │   │   │   ├── random_2
+    │   │   │   ├── random_3
+    │   │   │   └── random_4
+    │   │   ├── params
+    │   │   │   └── seed
+    │   │   └── tags
+    │   │       ├── mlflow.runName
+    │   │       ├── mlflow.source.git.commit
+    │   │       ├── mlflow.source.name
+    │   │       ├── mlflow.source.type
+    │   │       └── mlflow.user
+    │   ├── 9b52b7b7416e423ca9c878fba9b5c667
+    │   │   ├── artifacts
+    │   │   │   └── examples
+    │   │   │       └── example.txt
+    │   │   ├── meta.yaml
+    │   │   ├── metrics
+    │   │   │   ├── random_0
+    │   │   │   ├── random_1
+    │   │   │   ├── random_2
+    │   │   │   ├── random_3
+    │   │   │   └── random_4
+    │   │   ├── params
+    │   │   │   └── seed
+    │   │   └── tags
+    │   │       ├── mlflow.runName
+    │   │       ├── mlflow.source.git.commit
+    │   │       ├── mlflow.source.name
+    │   │       ├── mlflow.source.type
+    │   │       └── mlflow.user
+    │   ├── meta.yaml
+    │   └── tags
+    │       └── mlflow.experimentKind
+    └── models
+    ```
+
+--- 
+
+## A taste of MLflow's Tracking API (pt. 3)
+
+7. Let's now start the __MLflow Web UI__ via the following command, to _visualize_ the experiment runs:
+    ```bash
+    mlflow ui
+    ```
+
+    then browse to <http://127.0.0.1:5000> in your favorite browser
+
+8. You should see something like the following:
+    ![](./mlflow-ui-dummy-1.png)
+
+--- 
+
+## A taste of MLflow's Tracking API (pt. 4)
+
+9. Click on the __experiment name__ (`logging_example`) to see the two runs:
+    ![](./mlflow-ui-dummy-2.png)
+    - notice that the _latest_ run is marked as __failing__ while the earliest one is successful 
+        + the __exit code__ of the run is registered automatically
+
+--- 
+
+## A taste of MLflow's Tracking API (pt. 5)
+
+10. You may switch to the __"Chart view"__ to see a _comparison_ among the logged _metrics_ (across all runs):
+    ![](./mlflow-ui-dummy-2a.png)
+
+--- 
+
+## A taste of MLflow's Tracking API (pt. 6)
+
+11. You may click on one __run name__ to see details about that run
+    ![](./mlflow-ui-dummy-3.png)
+    - notice the logged _parameters_, _metrics_, and _metadata_
+        * notice that these are the same information we logged via the MLflow Python API + some automatically-inferred metadata
+    - notice that these data are the same one stored on the file system, in `mlruns/`
+
+---
+
+## A taste of MLflow's Tracking API (pt. 7)
+
+12. You may switch to the __"Modal metrics"__ tab to see the logged metrics in graphical form:
+    ![](./mlflow-ui-dummy-4.png)
+
+---
+
+## A taste of MLflow's Tracking API (pt. 8)
+
+13. You may switch to the __"Artifacts"__ tab to see the logged artifacts:
+    ![](./mlflow-ui-dummy-5.png)
+    - notice that the `example.txt` artifact is inside some "virtual" `examples/` folder
+        + as we asked explicitly in the Python code
+
+{{% /section %}}
 
 ---
 
