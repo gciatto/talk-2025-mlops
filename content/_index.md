@@ -798,6 +798,42 @@ Notice that, in set-up 3, there could be up to three servers involved:
 
 ---
 
+{{% section %}}
+
+## Autologging APIs
+
+1. Consider the following script, aimed at training a [decision tree classifier](https://scikit-learn.org/stable/modules/tree.html) for the [Iris dataset](https://it.wikipedia.org/wiki/Dataset_Iris), via [SciKit-Learn library](https://scikit-learn.org)
+    ```python
+    from sklearn.datasets import load_iris # to load the iris dataset
+    from sklearn.tree import DecisionTreeClassifier # to use decision tree classifier
+    import mlflow # to use MLflow functionalities
+    import sys # to read command-line arguments
+    # Set the experiment name (creates it if it does not exist)
+    mlflow.set_experiment("autologging-example")
+    # Enable autologging for scikit-learn (and other ML libraries in general)
+    mlflow.autolog(log_datasets=True, log_models=True, log_model_signatures=True, log_input_examples=True)
+    # Read a seed from command-line arguments (default: 42)
+    seed = int(sys.argv[1]) if len(sys.argv) > 1 else 42
+    # Start an MLflow run, naming it "autologging_run"
+    with mlflow.start_run(run_name="autologging_run"):
+        # Load full iris dataset
+        X, y = load_iris(return_X_y=True)
+
+        # Train model on the entire dataset (using the given seed)
+        model = DecisionTreeClassifier(random_state=seed)
+        model.fit(X, y)
+        # Evaluate model on the entire dataset (training accuracy)
+        training_score = model.score(X, y)
+        print("Training accuracy:", training_score)
+        # Raise an error if training accuracy is below 90%
+        if training_score < 0.9:
+            raise ValueError("Training accuracy is too low: " + str(training_score))
+    ```
+
+{{% /section %}}
+
+---
+
 # Talk is Over
 
 <br>
