@@ -58,7 +58,7 @@ outputs = ["Reveal"]
 ## What is the _goal_ of a Machine Learning workflow?
 
 Training a __model__ from _data_, in order to:
-- do __prediction__ on _unseen data_, 
+- do __prediction__ on _unseen data_,
     * e.g. spam filter
 - or __mine__ information from it,
     * e.g. profiling customers
@@ -183,7 +183,7 @@ The process of producing a ML model is __not__ _linear_ __nor__ _simple_:
 {{% col %}}
 ### Via Notebooks (e.g. Jupyter)
 
-- ✅ Interleave code, textual description, and visualizations  
+- ✅ Interleave code, textual description, and visualizations
 
 - ✅ Interactive usage, allowing for real-time feedback and adjustments
 
@@ -248,14 +248,14 @@ The process of producing a ML model is __not__ _linear_ __nor__ _simple_:
 > No structured process $\implies$ ML projects may fail to move from notebooks to real-world use
 {{% /fragment %}}
 
---- 
+---
 
 ## Machine Learning Operations ([MLOps](https://en.wikipedia.org/wiki/MLOps))
 
 > The practice of organizing and __automating__ the _end-to-end_ process of building, training, deploying, and maintaining _machine-learning models_
 
 {{% fragment %}}
-### Expected benefits 
+### Expected benefits
 
 - __Reproducibility__ → the same code + same data always gives the same model
 - __Automation__ → repetitive steps (training, testing, deployment) are handled by pipelines
@@ -359,7 +359,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 
 4. A set of __vector stores__ (if needed), populated with relevant data, and accessible by the agents
     * there are _software modules_, somewhat similar to ordinary DBMS, offering CRUD operations on data chunks _indexed by_ their _embeddings_
-    
+
 ---
 
 {{% section %}}
@@ -379,7 +379,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 
 ## Peculiar activities in a typical GenAI workflow
 
-1. __Foundation model selection__: choose the most suitable pre-trained model(s) based on task requirements, performance, cost, data protection, and availability 
+1. __Foundation model selection__: choose the most suitable pre-trained model(s) based on task requirements, performance, cost, data protection, and availability
     * implies trying out prompts (even manually) on different models
 
 2. __Prompt engineering__: design, test, and refine prompt templates to elicit the desired responses
@@ -406,7 +406,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 
 2. __Data Collection__: past tenders' technical specifications, acts, etc; regulatory documents, etc.
 
-3. __Data Preparation__: 
+3. __Data Preparation__:
     - devise useful data schema & extract relevant data from documents
     - anonymize sensitive info (suppliers, personal data)
     - segment documents and index by topic (law, SLA, price table, etc.)
@@ -415,7 +415,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 
 ## Example of GenAI workflow (pt. 2)
 
-4. __Prompt Engineering__: 
+4. __Prompt Engineering__:
     1. design prompt templates for comparison, justification, and Q&A
         * use role-based system prompts (`You are a procurement evaluator…`)
     2. allocate placeholders for RAG-retrieved data chunks
@@ -427,15 +427,15 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
     1. choose embedding model, chunking strategy, and populate vector store
     2. engineer retrieval strategies to fetch relevant chunks
 
-8. __Tools__: 
+8. __Tools__:
     * regulation lookup API + tender database query API
     * report generation out of document templates
     * automate scoring calculations via spreadsheet or Python scripts generation
 
-9. __Agents__: 
+9. __Agents__:
     1. exploit LLM to extract structured check-lists out of technical specs
     2. orchestrate RAG, tool invocations, and prompt templates to score each offer
-    3. generate comparison reports 
+    3. generate comparison reports
     4. ...
 
 {{% /section %}}
@@ -455,7 +455,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 <br>
 
 {{% fragment %}}
-### Expected benefits 
+### Expected benefits
 
 - __Systematicity__ → structured processes to manage prompts, tools, and agents
 - __Efficiency__ → reuse of components, templates, and evaluations
@@ -488,8 +488,8 @@ LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more 
     * making it hard to track changes or reuse them
 
 - __Tools__ are _manually integrated_, leading to:
-    * brittle connections, 
-    * lack of observability, 
+    * brittle connections,
+    * lack of observability,
     * maintenance challenges
 
 - __Agents__ are _ad-hoc scripts_ that mix logic, PFM calls, and tool invocations
@@ -508,14 +508,14 @@ LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more 
 
 ## What is MLflow? <https://mlflow.org/>
 
-![](./mlflow-logo.webp) 
+![](./mlflow-logo.webp)
 
 > An _open-source_ Python framework for __MLOps__ and (most recently) __LLMOps__
 * usable either in-cloud (e.g. via [Databricks](https://www.databricks.com/)) or on-premises (self-hosted)
     + we'll see the latter setup
 
 {{% fragment %}}
-### Outline 
+### Outline
 
 1. First, we focus on how to use MLflow for the sake of _MLOps_
 2. Then, we show how MLflow can be used for _LLMOps_ as well
@@ -578,7 +578,7 @@ Notice that, in set-up 3, there could be up to three servers involved:
 
 1. the __Backend Store__ server (a relational DBMS, e.g. PostgreSQL, MySQL, SQLite, etc.) to store _metadata_
 2. the __Artifact Store__ server (e.g. S3, Azure Blob Storage, etc.) to store _artifacts_ via some file-system interface
-3. the __MLflow Tracking Server__ to provide the UI and API endpoints 
+3. the __MLflow Tracking Server__ to provide the UI and API endpoints
     + this is mediating the interaction between users and the two stores
 ---
 
@@ -599,7 +599,7 @@ Notice that, in set-up 3, there could be up to three servers involved:
     - __artifact__ $\approx$ dataset, model, chart, etc.
 
 2. Metadata and artifacts may be stored (depending on the configuration):
-    - on the local file system 
+    - on the local file system
     - on a remote backend and artifact store
 
 {{% /fragment %}}
@@ -665,7 +665,7 @@ Notice that, in set-up 3, there could be up to three servers involved:
         print("Run completed successfully.")
     ```
 
---- 
+---
 
 ## A taste of MLflow's Tracking API (pt. 2)
 
@@ -738,7 +738,7 @@ Notice that, in set-up 3, there could be up to three servers involved:
     └── models
     ```
 
---- 
+---
 
 ## A taste of MLflow's Tracking API (pt. 3)
 
@@ -752,23 +752,23 @@ Notice that, in set-up 3, there could be up to three servers involved:
 8. You should see something like the following:
     ![](./mlflow-ui-dummy-1.png)
 
---- 
+---
 
 ## A taste of MLflow's Tracking API (pt. 4)
 
 9. Click on the __experiment name__ (`logging_example`) to see the two runs:
     ![](./mlflow-ui-dummy-2.png)
-    - notice that the _latest_ run is marked as __failing__ while the earliest one is successful 
+    - notice that the _latest_ run is marked as __failing__ while the earliest one is successful
         + the __exit code__ of the run is registered automatically
 
---- 
+---
 
 ## A taste of MLflow's Tracking API (pt. 5)
 
 10. You may switch to the __"Chart view"__ to see a _comparison_ among the logged _metrics_ (across all runs):
     ![](./mlflow-ui-dummy-2a.png)
 
---- 
+---
 
 ## A taste of MLflow's Tracking API (pt. 6)
 
@@ -800,7 +800,7 @@ Notice that, in set-up 3, there could be up to three servers involved:
 
 {{% section %}}
 
-## Autologging APIs
+## Autologging APIs (pt. 1)
 
 1. Consider the following script, aimed at training a [decision tree classifier](https://scikit-learn.org/stable/modules/tree.html) for the [Iris dataset](https://it.wikipedia.org/wiki/Dataset_Iris), via [SciKit-Learn library](https://scikit-learn.org)
     ```python
@@ -818,7 +818,6 @@ Notice that, in set-up 3, there could be up to three servers involved:
     with mlflow.start_run(run_name="autologging_run"):
         # Load full iris dataset
         X, y = load_iris(return_X_y=True)
-
         # Train model on the entire dataset (using the given seed)
         model = DecisionTreeClassifier(random_state=seed)
         model.fit(X, y)
@@ -830,7 +829,119 @@ Notice that, in set-up 3, there could be up to three servers involved:
             raise ValueError("Training accuracy is too low: " + str(training_score))
     ```
 
+---
+
+## Autologging APIs (pt. 2)
+
+1. Let's run the experiment _once_, with default seed:
+    ```bash
+    python autologging_example.py
+    ```
+
+2. The run shall output something like:
+    ```text
+    2025/11/11 16:27:49 INFO mlflow.tracking.fluent: Experiment with name 'autologging-example' does not exist. Creating a new experiment.
+    2025/11/11 16:27:50 INFO mlflow.tracking.fluent: Autologging successfully enabled for sklearn.
+    Training accuracy: 1.0
+    ```
+
+3. Let's now look at the MLflow UI again (via `mlflow ui` command) to see the new experiment:
+    ![](./mlflow-ui-autolog-1.png)
+
+---
+
+## Autologging APIs (pt. 3)
+
+4. Click on the __experiment name__ (`autologging-example`) to see the run:
+    ![](./mlflow-ui-autolog-2.png)
+    - notice that the run logged many more information automatically (e.g. dataset, model, etc.)
+    - notice that the _green tick_ indicates that the run was successful __(training score is above 90%)__
+
+---
+
+## Autologging APIs (pt. 4)
+
+5. Click on the __run name__ to see details about that run
+
+    {{< image src="./mlflow-ui-autolog-3a.png" width="100%" max-h="60vh" >}}
+    <!-- ![](./mlflow-ui-autolog-3a.png) -->
+    - notice the logged _parameters_, _metrics_, and _metadata_
+        * __recall that we didin't log any of these explicitly__ in the Python code!
+
+---
+
+## Autologging APIs (pt. 4)
+
+5. Click on the __run name__ to see details about that run
+
+    {{< image src="./mlflow-ui-autolog-3b.png" width="100%" max-h="60vh" >}}
+    <!-- ![](./mlflow-ui-autolog-3b.png) -->
+    - notice the logged _model_
+        * __recall that we didin't log it explicitly__ in the Python code!
+
+---
+
+## Autologging APIs (pt. 5)
+
+6. Click on the __"Artifacts"__ tab to see the automatically-logged artifacts:
+    ![](./mlflow-ui-autolog-4.png)
+    - notice the file `estimator.html` (HTML representation of the SciKit-Learn processing pipeline)
+    - notice the file `metric_info.json` (details about automatically-logged metrics)
+    - notice the file `training_confusion_matrix.png` (confusion matrix _picture_ on training data)
+
+---
+
+## Autologging APIs (pt. 6)
+
+7. Click on the logged __model__ to see its details:
+
+    {{< image src="./mlflow-ui-autolog-5.png" width="100%" max-h="60vh" >}}
+    <!-- ![](./mlflow-ui-autolog-5.png) -->
+    - notice that some _metrics_ are automatically computed on training data (accuracy, f1-score, precision, AUC ROC, etc.)
+    - notice the logged _parameters_ (these are the actual parameters of the SciKit-Learn class)
+    - notice that the _training dataset_ schema is logged as well (this is the __input schema__ expected by the model)
+    - notice the _ID of the model_: `m-cbc72d11f1e6405bbaa77889f08b92dd`
+        * meaning that the URI of the model will be <mlflow://m-cbc72d11f1e6405bbaa77889f08b92dd>
+
+---
+
+## Autologging APIs (pt. 7)
+
+8. Click on the __"Artifacts"__ tab of the model view to see automatically-logged artifacts for the model:
+    ![](./mlflow-ui-autolog-6.png)
+    - notice file `MLmodel` (YAML description of the model)
+    - notice file `model.pkl` (the actual serialized model, in Python `pickle` format)
+    - notice file `requirements.txt` (Python environment to run the model, in `pip` format)
+    - notice file `serving_input_example.json` (example input data for model serving via MLflow)
+
 {{% /section %}}
+
+---
+
+TODO: describe model prediction and model deployment via MLflow
+
+1. Download the file `serving_input_example.json` locally
+    ```json
+    {
+        "inputs": [
+            [5.1, 3.5, 1.4, 0.2],
+            [4.9, 3, 1.4, 0.2],
+            [4.7, 3.2, 1.3, 0.2],
+            [4.6, 3.1, 1.5, 0.2],
+            [5, 3.6, 1.4, 0.2]
+        ]
+    }
+    ```
+
+2. Run
+    ```base
+    mlflow models predict --env-manager local -m "models:/m-1abbea58e1cf442ab9412b7eae572523" -i path/to/serving_input_example.json
+    ```
+
+3. Observe the predictions output:
+    ```text
+    {"predictions": [0, 0, 0, 0, 0]}
+    ```
 
 ---
 
