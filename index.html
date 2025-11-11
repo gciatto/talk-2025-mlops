@@ -989,7 +989,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 
 <section data-shortcode-section="">
-<h2 id="autologging-apis">Autologging APIs</h2>
+<h2 id="autologging-apis-pt-1">Autologging APIs (pt. 1)</h2>
 <ol>
 <li>Consider the following script, aimed at training a <a href="https://scikit-learn.org/stable/modules/tree.html">decision tree classifier</a> for the <a href="https://it.wikipedia.org/wiki/Dataset_Iris">Iris dataset</a>, via <a href="https://scikit-learn.org">SciKit-Learn library</a>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">sklearn.datasets</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">load_iris</span> <span style="color:#8f5902;font-style:italic"># to load the iris dataset</span>
@@ -1006,7 +1006,6 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">with</span> <span style="color:#000">mlflow</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">start_run</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">run_name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"autologging_run"</span><span style="color:#000;font-weight:bold">):</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#8f5902;font-style:italic"># Load full iris dataset</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">X</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">y</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">load_iris</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">return_X_y</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">True</span><span style="color:#000;font-weight:bold">)</span>
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#8f5902;font-style:italic"># Train model on the entire dataset (using the given seed)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">model</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">DecisionTreeClassifier</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">random_state</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">seed</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">fit</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">X</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">y</span><span style="color:#000;font-weight:bold">)</span>
@@ -1018,8 +1017,137 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">raise</span> <span style="color:#c00;font-weight:bold">ValueError</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"Training accuracy is too low: "</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">training_score</span><span style="color:#000;font-weight:bold">))</span>
 </span></span></code></pre></div></li>
 </ol>
+</section><section>
+<h2 id="autologging-apis-pt-2">Autologging APIs (pt. 2)</h2>
+<ol>
+<li>
+<p>Let’s run the experiment <em>once</em>, with default seed:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python autologging_example.py
+</span></span></code></pre></div></li>
+<li>
+<p>The run shall output something like:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/11 16:27:49 INFO mlflow.tracking.fluent: Experiment with name 'autologging-example' does not exist. Creating a new experiment.
+</span></span><span style="display:flex;"><span>2025/11/11 16:27:50 INFO mlflow.tracking.fluent: Autologging successfully enabled for sklearn.
+</span></span><span style="display:flex;"><span>Training accuracy: 1.0
+</span></span></code></pre></div></li>
+<li>
+<p>Let’s now look at the MLflow UI again (via <code>mlflow ui</code> command) to see the new experiment:
+<img src="./mlflow-ui-autolog-1.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-3">Autologging APIs (pt. 3)</h2>
+<ol start="4">
+<li>Click on the <strong>experiment name</strong> (<code>autologging-example</code>) to see the run:
+<img src="./mlflow-ui-autolog-2.png" alt="">
+<ul>
+<li>notice that the run logged many more information automatically (e.g. dataset, model, etc.)</li>
+<li>notice that the <em>green tick</em> indicates that the run was successful <strong>(training score is above 90%)</strong></li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-4">Autologging APIs (pt. 4)</h2>
+<ol start="5">
+<li>
+<p>Click on the <strong>run name</strong> to see details about that run</p>
+ <img src="./mlflow-ui-autolog-3a.png" alt="" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+ <!-- ![](./mlflow-ui-autolog-3a.png) -->
+<ul>
+<li>notice the logged <em>parameters</em>, <em>metrics</em>, and <em>metadata</em>
+<ul>
+<li><strong>recall that we didin’t log any of these explicitly</strong> in the Python code!</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-4-1">Autologging APIs (pt. 4)</h2>
+<ol start="5">
+<li>
+<p>Click on the <strong>run name</strong> to see details about that run</p>
+ <img src="./mlflow-ui-autolog-3b.png" alt="" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+ <!-- ![](./mlflow-ui-autolog-3b.png) -->
+<ul>
+<li>notice the logged <em>model</em>
+<ul>
+<li><strong>recall that we didin’t log it explicitly</strong> in the Python code!</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-5">Autologging APIs (pt. 5)</h2>
+<ol start="6">
+<li>Click on the <strong>“Artifacts”</strong> tab to see the automatically-logged artifacts:
+<img src="./mlflow-ui-autolog-4.png" alt="">
+<ul>
+<li>notice the file <code>estimator.html</code> (HTML representation of the SciKit-Learn processing pipeline)</li>
+<li>notice the file <code>metric_info.json</code> (details about automatically-logged metrics)</li>
+<li>notice the file <code>training_confusion_matrix.png</code> (confusion matrix <em>picture</em> on training data)</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-6">Autologging APIs (pt. 6)</h2>
+<ol start="7">
+<li>
+<p>Click on the logged <strong>model</strong> to see its details:</p>
+ <img src="./mlflow-ui-autolog-5.png" alt="" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+ <!-- ![](./mlflow-ui-autolog-5.png) -->
+<ul>
+<li>notice that some <em>metrics</em> are automatically computed on training data (accuracy, f1-score, precision, AUC ROC, etc.)</li>
+<li>notice the logged <em>parameters</em> (these are the actual parameters of the SciKit-Learn class)</li>
+<li>notice that the <em>training dataset</em> schema is logged as well (this is the <strong>input schema</strong> expected by the model)</li>
+<li>notice the <em>ID of the model</em>: <code>m-cbc72d11f1e6405bbaa77889f08b92dd</code>
+<ul>
+<li>meaning that the URI of the model will be <a href="mlflow://m-cbc72d11f1e6405bbaa77889f08b92dd">mlflow://m-cbc72d11f1e6405bbaa77889f08b92dd</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="autologging-apis-pt-7">Autologging APIs (pt. 7)</h2>
+<ol start="8">
+<li>Click on the <strong>“Artifacts”</strong> tab of the model view to see automatically-logged artifacts for the model:
+<img src="./mlflow-ui-autolog-6.png" alt="">
+<ul>
+<li>notice file <code>MLmodel</code> (YAML description of the model)</li>
+<li>notice file <code>model.pkl</code> (the actual serialized model, in Python <code>pickle</code> format)</li>
+<li>notice file <code>requirements.txt</code> (Python environment to run the model, in <code>pip</code> format)</li>
+<li>notice file <code>serving_input_example.json</code> (example input data for model serving via MLflow)</li>
+</ul>
+</li>
+</ol>
 
 </section>
+</section><section>
+<p>TODO: describe model prediction and model deployment via MLflow</p>
+<ol>
+<li>
+<p>Download the file <code>serving_input_example.json</code> locally</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">"inputs"</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">[</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">5.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.9</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.7</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.2</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.6</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.6</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Run</p>
+<pre tabindex="0"><code class="nohighlight" data-noescape="">mlflow models predict --env-manager local -m "models:/m-1abbea58e1cf442ab9412b7eae572523" -i path/to/serving_input_example.json
+</code></pre></li>
+<li>
+<p>Observe the predictions output:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 0, 0, 0, 0]}
+</span></span></code></pre></div></li>
+</ol>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
