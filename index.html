@@ -39,7 +39,7 @@
 
 <img src='./front.png' alt='' style='max-width: 95vw; max-height: 50vh; object-fit: contain;'>
  -->
-<p><span class="hint">(versione presentazione: 2025-11-11
+<p><span class="hint">(versione presentazione: 2025-11-12
 )</span></p>
 </section><section>
 <h2 id="link-a-queste-slide">Link a queste slide</h2>
@@ -737,7 +737,15 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </div>
 </section><section>
 <h2 id="mlflows-complex-set-up">MLflow’s complex set-up</h2>
-<p>Notice that, in set-up 3, there could be up to three servers involved:</p>
+<!-- ![](./mlflow-multi-server.png) -->
+
+
+
+
+
+<img src="./mlflow-multi-server.png" alt="" style="width: 100%; max-width: 95vw; max-height: 50vh; object-fit: contain;">
+
+<p>Notice that, in set-up 3, there could be up to <em>three servers</em> involved:</p>
 <ol>
 <li>the <strong>Backend Store</strong> server (a relational DBMS, e.g. PostgreSQL, MySQL, SQLite, etc.) to store <em>metadata</em></li>
 <li>the <strong>Artifact Store</strong> server (e.g. S3, Azure Blob Storage, etc.) to store <em>artifacts</em> via some file-system interface</li>
@@ -1125,17 +1133,48 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 </section>
 </section><section>
-<p>TODO: describe model prediction and model deployment via MLflow</p>
+<h2 id="model-deployment-and-serving-via-mlflow">Model deployment and serving via MLflow</h2>
+<!-- ![](./mlflow-serving.png) -->
+
+
+
+
+
+<img src="./mlflow-serving.png" alt="" style="width: 100%; max-width: 95vw; max-height: 40vh; object-fit: contain;">
+
+<ul>
+<li>
+<p>MLflow assists in <strong>model deployment</strong> by <em>mediating the interatction</em> between logged models and their clients</p>
+<ul>
+<li>clients are assumed to use the models in <em>inference</em> mode (i.e. for prediction serving)</li>
+<li>clinets may be either <strong>command-line tools</strong> or <strong>Web API</strong> consumers</li>
+</ul>
+</li>
+<li>
+<p>MLflow automates the creation of <strong>container images</strong> for the sake of model deployment</p>
+<ul>
+<li>these images may be deployed on common <em>cloud platforms</em> (e.g. AWS SageMaker, Azure ML, Google Cloud AI Platform, etc.)</li>
+<li>these images may be deployed <em>on-premises</em> as well (e.g. via Docker or Kubernetes)</li>
+</ul>
+</li>
+</ul>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="model-serving-via-mlflow-pt-1">Model serving via MLflow (pt. 1)</h2>
+<blockquote>
+<p>Saved models can be easily used via MLflow’s <strong>command-line interface</strong> (CLI) or <strong>Web API</strong> for prediction serving</p>
+</blockquote>
+<h3 id="cli-example">CLI Example</h3>
 <ol>
 <li>
 <p>Download the file <code>serving_input_example.json</code> locally</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">"inputs"</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">[</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">5.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.9</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.7</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.2</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">4.6</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.6</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">7.0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.2</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">4.7</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">],</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">6.3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.3</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">6.0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">2.5</span><span style="color:#000;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span></code></pre></div></li>
@@ -1145,13 +1184,145 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </code></pre></li>
 <li>
 <p>Observe the predictions output:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 0, 0, 0, 0]}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
 </span></span></code></pre></div></li>
 </ol>
 </section><section>
+<h2 id="model-serving-via-mlflow-pt-2">Model serving via MLflow (pt. 2)</h2>
+<blockquote>
+<p>Saved models can be easily used via MLflow’s <strong>command-line interface</strong> (CLI) or <strong>Web API</strong> for prediction serving</p>
+</blockquote>
+<h3 id="web-example">Web Example</h3>
+<ol>
+<li>
+<p>Start the MLflow model serving endpoint:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models serve --env-manager <span style="color:#204a87">local</span> -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -p <span style="color:#0000cf;font-weight:bold">1234</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Send a prediction request via <code>curl</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:1234/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    "inputs": [
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        [5.1, 3.5, 1.4, 0.2],
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        [7.0, 3.2, 4.7, 1.4],
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        [6.3, 3.3, 6.0, 2.5]
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    ]
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">}'</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Observe the predictions output:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="model-containerization-via-mlflow">Model containerization via MLflow</h2>
+<ol>
+<li>
+<p>Build a Docker image for the model:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models build-docker -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -n iris-classifier-dt:latest
+</span></span></code></pre></div></li>
+<li>
+<p>This should output something like:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/12 16:50:16 INFO mlflow.models.flavor_backend_registry: Selected backend for flavor 'python_function'
+</span></span><span style="display:flex;"><span>2025/11/12 16:50:16 INFO mlflow.pyfunc.backend: Building docker image with name mlflow-pyfunc-servable
+</span></span><span style="display:flex;"><span>[+] Building 254.3s (14/14) FINISHED                                                                                                                              docker:default
+</span></span><span style="display:flex;"><span>=&gt; [internal] load build definition from Dockerfile                                                                                                                        0.5s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; transferring dockerfile: 1.00kB                                                                                                                                      0.0s
+</span></span><span style="display:flex;"><span>=&gt; [internal] load metadata for docker.io/library/python:3.13.7-slim                                                                                                       6.2s
+</span></span><span style="display:flex;"><span>=&gt; [auth] library/python:pull token for registry-1.docker.io                                                                                                               0.0s
+</span></span><span style="display:flex;"><span>=&gt; [internal] load .dockerignore                                                                                                                                           0.3s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; transferring context: 2B                                                                                                                                             0.0s
+</span></span><span style="display:flex;"><span>=&gt; [internal] load build context                                                                                                                                           0.4s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; transferring context: 5.14kB                                                                                                                                         0.0s
+</span></span><span style="display:flex;"><span>=&gt; [1/8] FROM docker.io/library/python:3.13.7-slim@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689                                                 6.5s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; resolve docker.io/library/python:3.13.7-slim@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689                                                 0.1s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689 10.37kB / 10.37kB                                                                            0.0s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:2be5d3cb08aa616c6e38d922bd7072975166b2de772004f79ee1bae59fe983dc 1.75kB / 1.75kB                                                                              0.0s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:7b444340715da1bb14bdb39c8557e0195455f5f281297723c693a51bc38a2c4a 5.44kB / 5.44kB                                                                              0.0s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:8c7716127147648c1751940b9709b6325f2256290d3201662eca2701cadb2cdf 29.78MB / 29.78MB                                                                            2.1s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:31fd2a94d72338ac6bbe103da6448d7e4cb7e7a29b9f56fa61d307b4395edf86 1.29MB / 1.29MB                                                                              0.7s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:66b685f2f76ba4e1e04b26b98a2aca385ea829c3b1ec637fbd82df8755973a60 11.74MB / 11.74MB                                                                            2.5s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; sha256:7d456e82f89bfe09aec396e93d830ba74fe0257fe2454506902adf46fb4377b3 250B / 250B                                                                                  1.3s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; extracting sha256:8c7716127147648c1751940b9709b6325f2256290d3201662eca2701cadb2cdf                                                                                   0.8s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; extracting sha256:31fd2a94d72338ac6bbe103da6448d7e4cb7e7a29b9f56fa61d307b4395edf86                                                                                   0.2s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; extracting sha256:66b685f2f76ba4e1e04b26b98a2aca385ea829c3b1ec637fbd82df8755973a60                                                                                   0.6s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; extracting sha256:7d456e82f89bfe09aec396e93d830ba74fe0257fe2454506902adf46fb4377b3                                                                                   0.0s
+</span></span><span style="display:flex;"><span>=&gt; [2/8] RUN apt-get -y update &amp;&amp; apt-get install -y --no-install-recommends nginx                                                                                        20.5s
+</span></span><span style="display:flex;"><span>=&gt; [3/8] WORKDIR /opt/mlflow                                                                                                                                               0.3s
+</span></span><span style="display:flex;"><span>=&gt; [4/8] RUN pip install mlflow==3.5.0                                                                                                                                   162.1s
+</span></span><span style="display:flex;"><span>=&gt; [5/8] COPY model_dir /opt/ml/model                                                                                                                                      0.9s
+</span></span><span style="display:flex;"><span>=&gt; [6/8] RUN python -c "from mlflow.models import container as C; C._install_pyfunc_deps('/opt/ml/model', install_mlflow=False, enable_mlserver=False, env_manager='loca  27.6s
+</span></span><span style="display:flex;"><span>=&gt; [7/8] RUN chmod o+rwX /opt/mlflow/                                                                                                                                      0.9s
+</span></span><span style="display:flex;"><span>=&gt; [8/8] RUN rm -rf /var/lib/apt/lists/*                                                                                                                                   1.7s
+</span></span><span style="display:flex;"><span>=&gt; exporting to image                                                                                                                                                     25.4s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; exporting layers                                                                                                                                                    24.9s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; writing image sha256:7b41a8c6bd049022abc8aeaaa41b7b60008c242fbc59c41073fc61daec05952d                                                                                0.1s
+</span></span><span style="display:flex;"><span>=&gt; =&gt; naming to docker.io/library/iris-classifier-dt
+</span></span></code></pre></div></li>
+<li>
+<p>Run the Docker container:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>docker run --rm -it --network host iris-classifier-dt:latest
+</span></span></code></pre></div></li>
+<li>
+<p>Send a prediction request via <code>curl</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:8000/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{ "inputs": [[5.1, 3.5, 1.4, 0.2], [7.0, 3.2, 4.7, 1.4], [6.3, 3.3, 6.0, 2.5]] }'</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Observe the predictions output:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
+</span></span></code></pre></div></li>
+</ol>
+
+</section>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="model-registration-via-mlflow-pt-1">Model registration via MLflow (pt. 1)</h2>
+<blockquote>
+<p>One may <strong>register</strong> a model $\approx$ give it a <em>human-friendly name</em> + <em>versioning</em></p>
+</blockquote>
+<span class="fragment ">
+  <ol>
+<li>In the MLflow UI, go visit some logged model’s page, then click on the <strong>“Register”</strong> button
+<img src="./mlflow-ui-model-register-1.png" alt=""></li>
+</ol>
+</span>
+</section><section>
+<h2 id="model-registration-via-mlflow-pt-2">Model registration via MLflow (pt. 2)</h2>
+<ol start="2">
+<li>The model will now appears in the <strong>“Models”</strong> section of the MLflow UI, with its <em>symbolic name</em>
+<img src="./mlflow-ui-model-register-2.png" alt=""></li>
+</ol>
+</section><section>
+<h2 id="model-registration-via-mlflow-pt-3">Model registration via MLflow (pt. 3)</h2>
+<ol start="3">
+<li>
+<p>Click on the <strong>model name</strong> to see its available versions</p>
+ <!-- ![](./mlflow-ui-model-register-3.png) -->
+ <img src="./mlflow-ui-model-register-3.png" alt="" style="width: 100%; max-width: 95vw; max-height: 60vh; object-fit: contain;">
+<ul>
+<li><em>multiple versions</em> of the same model may <em>coexist</em></li>
+<li>each model’s version may be referred via the URI: <code>models:/&lt;model-name&gt;/&lt;version&gt;</code>
+<ul>
+<li>e.g. try to re-run the commands for predictions with model URI: <a href="models:/iris-classifier/1">models:/iris-classifier/1</a></li>
+</ul>
+</li>
+<li>one may reference the last version of the model via the URI: <code>models:/&lt;model-name&gt;@latest</code></li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="model-registration-via-mlflow-pt-4">Model registration via MLflow (pt. 4)</h2>
+<ol start="4">
+<li>Details about some model’s version are inspectable in the UI as well
+<img src="./mlflow-ui-model-register-4.png" alt=""></li>
+</ol>
+
+</section>
+</section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
-<p>Compiled on: 2025-11-11
+<p>Compiled on: 2025-11-12
  — <a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> printable version</a></p>
 <p><a href="#toc"><i class="fa fa-undo" aria-hidden="true"></i> back to ToC</a></p>
 </section>
