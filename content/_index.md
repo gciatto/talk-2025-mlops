@@ -591,14 +591,14 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 ### Assumptions
 
 1. Some Python code is in place to perform ML tasks (via common libraries such as `scikit-learn`, `TensorFlow`, `PyTorch`, etc.)
-2. The code is using the MLflow Python API to log metadata about experiments, datasets, models, metrics, etc.
+2. The code is using MLflow's Python API to log metadata about experiments, datasets, models, metrics, etc.
 
 {{% fragment %}}
 ### Workflow
 
 0. Start the Python code
 
-1. The MLflow Python API invoked in the code will actually log all relevant _metadata_ and _artifacts_ as the code runs
+1. MLflow's Python API invoked in the code will actually log all relevant _metadata_ and _artifacts_ as the code runs
     - __metadata__ $\approx$ experiment id, run id, timings, data schemas, input parameters, hyper-parameters, metric values, etc.
     - __artifact__ $\approx$ dataset, model, chart, etc.
 
@@ -618,7 +618,7 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 - __No big constraint__ on how to organize the Python code it-self...
 
 
-- ... but many __benefits__ (_automatization_, reproducibility) may come from organizing the code as an [MLflow Project](https://mlflow.org/docs/latest/ml/projects/)
+- ... but many __benefits__ (_automation_, reproducibility) may come from organizing the code as an [MLflow Project](https://mlflow.org/docs/latest/ml/projects/)
     + $\implies$ _decomposing_ the _code_ into multiple scripts
     + $\implies$ thinking about the _parametric aspects_ of the experiment, and account for _command-line arguments_ accordingly
     + $\implies$ thinking about the _environment_ where the code will run (e.g. dependencies, libraries, etc.)
