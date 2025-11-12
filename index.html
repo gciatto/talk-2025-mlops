@@ -760,7 +760,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h3 id="assumptions">Assumptions</h3>
 <ol>
 <li>Some Python code is in place to perform ML tasks (via common libraries such as <code>scikit-learn</code>, <code>TensorFlow</code>, <code>PyTorch</code>, etc.)</li>
-<li>The code is using the MLflow Python API to log metadata about experiments, datasets, models, metrics, etc.</li>
+<li>The code is using MLflow’s Python API to log metadata about experiments, datasets, models, metrics, etc.</li>
 </ol>
 
 
@@ -771,7 +771,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <p>Start the Python code</p>
 </li>
 <li>
-<p>The MLflow Python API invoked in the code will actually log all relevant <em>metadata</em> and <em>artifacts</em> as the code runs</p>
+<p>MLflow’s Python API invoked in the code will actually log all relevant <em>metadata</em> and <em>artifacts</em> as the code runs</p>
 <ul>
 <li><strong>metadata</strong> $\approx$ experiment id, run id, timings, data schemas, input parameters, hyper-parameters, metric values, etc.</li>
 <li><strong>artifact</strong> $\approx$ dataset, model, chart, etc.</li>
@@ -801,7 +801,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <p><strong>No big constraint</strong> on how to organize the Python code it-self…</p>
 </li>
 <li>
-<p>… but many <strong>benefits</strong> (<em>automatization</em>, reproducibility) may come from organizing the code as an <a href="https://mlflow.org/docs/latest/ml/projects/">MLflow Project</a></p>
+<p>… but many <strong>benefits</strong> (<em>automation</em>, reproducibility) may come from organizing the code as an <a href="https://mlflow.org/docs/latest/ml/projects/">MLflow Project</a></p>
 <ul>
 <li>$\implies$ <em>decomposing</em> the <em>code</em> into multiple scripts</li>
 <li>$\implies$ thinking about the <em>parametric aspects</em> of the experiment, and account for <em>command-line arguments</em> accordingly</li>
