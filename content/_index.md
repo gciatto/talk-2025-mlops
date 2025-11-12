@@ -574,12 +574,16 @@ LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more 
 
 ## MLflow's complex set-up
 
-Notice that, in set-up 3, there could be up to three servers involved:
+<!-- ![](./mlflow-multi-server.png) -->
+{{< image src="./mlflow-multi-server.png" width="100%" max-h="50vh" >}}
+
+Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 1. the __Backend Store__ server (a relational DBMS, e.g. PostgreSQL, MySQL, SQLite, etc.) to store _metadata_
 2. the __Artifact Store__ server (e.g. S3, Azure Blob Storage, etc.) to store _artifacts_ via some file-system interface
 3. the __MLflow Tracking Server__ to provide the UI and API endpoints
     + this is mediating the interaction between users and the two stores
+
 ---
 
 ## MLflow's functioning overview
@@ -918,17 +922,36 @@ Notice that, in set-up 3, there could be up to three servers involved:
 
 ---
 
-TODO: describe model prediction and model deployment via MLflow
+## Model deployment and serving via MLflow
+
+<!-- ![](./mlflow-serving.png) -->
+{{< image src="./mlflow-serving.png" width="100%" max-h="40vh" >}}
+
+- MLflow assists in __model deployment__ by _mediating the interatction_ between logged models and their clients
+    + clients are assumed to use the models in _inference_ mode (i.e. for prediction serving)
+    + clinets may be either __command-line tools__ or __Web API__ consumers
+
+- MLflow automates the creation of __container images__ for the sake of model deployment
+    + these images may be deployed on common _cloud platforms_ (e.g. AWS SageMaker, Azure ML, Google Cloud AI Platform, etc.)
+    + these images may be deployed _on-premises_ as well (e.g. via Docker or Kubernetes) 
+
+---
+
+{{% section %}}
+
+## Model serving via MLflow (pt. 1)
+
+> Saved models can be easily used via MLflow's __command-line interface__ (CLI) or __Web API__ for prediction serving
+
+### CLI Example
 
 1. Download the file `serving_input_example.json` locally
     ```json
     {
         "inputs": [
             [5.1, 3.5, 1.4, 0.2],
-            [4.9, 3, 1.4, 0.2],
-            [4.7, 3.2, 1.3, 0.2],
-            [4.6, 3.1, 1.5, 0.2],
-            [5, 3.6, 1.4, 0.2]
+            [7.0, 3.2, 4.7, 1.4],
+            [6.3, 3.3, 6.0, 2.5]
         ]
     }
     ```
@@ -940,8 +963,147 @@ TODO: describe model prediction and model deployment via MLflow
 
 3. Observe the predictions output:
     ```text
-    {"predictions": [0, 0, 0, 0, 0]}
+    {"predictions": [0, 1, 2]}
     ```
+
+---
+
+## Model serving via MLflow (pt. 2)
+
+> Saved models can be easily used via MLflow's __command-line interface__ (CLI) or __Web API__ for prediction serving
+
+### Web Example
+
+1. Start the MLflow model serving endpoint:
+    ```bash
+    mlflow models serve --env-manager local -m "models:/m-1abbea58e1cf442ab9412b7eae572523" -p 1234
+    ```
+
+2. Send a prediction request via `curl`:
+    ```bash
+    curl http://localhost:1234/invocations -H "Content-Type:application/json" --data '{
+        "inputs": [
+            [5.1, 3.5, 1.4, 0.2],
+            [7.0, 3.2, 4.7, 1.4],
+            [6.3, 3.3, 6.0, 2.5]
+        ]
+    }'
+    ```
+
+3. Observe the predictions output:
+    ```text
+    {"predictions": [0, 1, 2]}
+    ```
+
+---
+
+## Model containerization via MLflow 
+
+1. Build a Docker image for the model:
+    ```bash
+    mlflow models build-docker -m "models:/m-1abbea58e1cf442ab9412b7eae572523" -n iris-classifier-dt:latest
+    ```
+    
+2. This should output something like:
+    ```text
+    2025/11/12 16:50:16 INFO mlflow.models.flavor_backend_registry: Selected backend for flavor 'python_function'
+    2025/11/12 16:50:16 INFO mlflow.pyfunc.backend: Building docker image with name mlflow-pyfunc-servable
+    [+] Building 254.3s (14/14) FINISHED                                                                                                                              docker:default
+    => [internal] load build definition from Dockerfile                                                                                                                        0.5s
+    => => transferring dockerfile: 1.00kB                                                                                                                                      0.0s
+    => [internal] load metadata for docker.io/library/python:3.13.7-slim                                                                                                       6.2s
+    => [auth] library/python:pull token for registry-1.docker.io                                                                                                               0.0s
+    => [internal] load .dockerignore                                                                                                                                           0.3s
+    => => transferring context: 2B                                                                                                                                             0.0s
+    => [internal] load build context                                                                                                                                           0.4s
+    => => transferring context: 5.14kB                                                                                                                                         0.0s
+    => [1/8] FROM docker.io/library/python:3.13.7-slim@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689                                                 6.5s
+    => => resolve docker.io/library/python:3.13.7-slim@sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689                                                 0.1s
+    => => sha256:5f55cdf0c5d9dc1a415637a5ccc4a9e18663ad203673173b8cda8f8dcacef689 10.37kB / 10.37kB                                                                            0.0s
+    => => sha256:2be5d3cb08aa616c6e38d922bd7072975166b2de772004f79ee1bae59fe983dc 1.75kB / 1.75kB                                                                              0.0s
+    => => sha256:7b444340715da1bb14bdb39c8557e0195455f5f281297723c693a51bc38a2c4a 5.44kB / 5.44kB                                                                              0.0s
+    => => sha256:8c7716127147648c1751940b9709b6325f2256290d3201662eca2701cadb2cdf 29.78MB / 29.78MB                                                                            2.1s
+    => => sha256:31fd2a94d72338ac6bbe103da6448d7e4cb7e7a29b9f56fa61d307b4395edf86 1.29MB / 1.29MB                                                                              0.7s
+    => => sha256:66b685f2f76ba4e1e04b26b98a2aca385ea829c3b1ec637fbd82df8755973a60 11.74MB / 11.74MB                                                                            2.5s
+    => => sha256:7d456e82f89bfe09aec396e93d830ba74fe0257fe2454506902adf46fb4377b3 250B / 250B                                                                                  1.3s
+    => => extracting sha256:8c7716127147648c1751940b9709b6325f2256290d3201662eca2701cadb2cdf                                                                                   0.8s
+    => => extracting sha256:31fd2a94d72338ac6bbe103da6448d7e4cb7e7a29b9f56fa61d307b4395edf86                                                                                   0.2s
+    => => extracting sha256:66b685f2f76ba4e1e04b26b98a2aca385ea829c3b1ec637fbd82df8755973a60                                                                                   0.6s
+    => => extracting sha256:7d456e82f89bfe09aec396e93d830ba74fe0257fe2454506902adf46fb4377b3                                                                                   0.0s
+    => [2/8] RUN apt-get -y update && apt-get install -y --no-install-recommends nginx                                                                                        20.5s
+    => [3/8] WORKDIR /opt/mlflow                                                                                                                                               0.3s
+    => [4/8] RUN pip install mlflow==3.5.0                                                                                                                                   162.1s
+    => [5/8] COPY model_dir /opt/ml/model                                                                                                                                      0.9s
+    => [6/8] RUN python -c "from mlflow.models import container as C; C._install_pyfunc_deps('/opt/ml/model', install_mlflow=False, enable_mlserver=False, env_manager='loca  27.6s
+    => [7/8] RUN chmod o+rwX /opt/mlflow/                                                                                                                                      0.9s
+    => [8/8] RUN rm -rf /var/lib/apt/lists/*                                                                                                                                   1.7s
+    => exporting to image                                                                                                                                                     25.4s
+    => => exporting layers                                                                                                                                                    24.9s
+    => => writing image sha256:7b41a8c6bd049022abc8aeaaa41b7b60008c242fbc59c41073fc61daec05952d                                                                                0.1s
+    => => naming to docker.io/library/iris-classifier-dt
+    ```
+
+3. Run the Docker container:
+    ```bash
+    docker run --rm -it --network host iris-classifier-dt:latest
+    ```
+
+4. Send a prediction request via `curl`:
+    ```bash
+    curl http://localhost:8000/invocations -H "Content-Type:application/json" --data '{ "inputs": [[5.1, 3.5, 1.4, 0.2], [7.0, 3.2, 4.7, 1.4], [6.3, 3.3, 6.0, 2.5]] }'
+    ```
+
+5. Observe the predictions output:
+    ```text
+    {"predictions": [0, 1, 2]}
+    ```
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## Model registration via MLflow (pt. 1)
+
+> One may __register__ a model $\approx$ give it a _human-friendly name_ + _versioning_
+
+{{% fragment %}}
+
+1. In the MLflow UI, go visit some logged model's page, then click on the __"Register"__ button
+    ![](./mlflow-ui-model-register-1.png)
+
+{{% /fragment %}}
+
+---
+
+## Model registration via MLflow (pt. 2)
+
+2. The model will now appears in the __"Models"__ section of the MLflow UI, with its _symbolic name_
+    ![](./mlflow-ui-model-register-2.png)
+
+---
+
+## Model registration via MLflow (pt. 3)
+
+3. Click on the __model name__ to see its available versions
+
+    <!-- ![](./mlflow-ui-model-register-3.png) -->
+    {{< image src="./mlflow-ui-model-register-3.png" width="100%" max-h="60vh" >}}
+
+    - _multiple versions_ of the same model may _coexist_
+    - each model's version may be referred via the URI: `models:/<model-name>/<version>`
+        * e.g. try to re-run the commands for predictions with model URI: <models:/iris-classifier/1>
+    - one may reference the last version of the model via the URI: `models:/<model-name>@latest`
+
+---
+
+## Model registration via MLflow (pt. 4)
+
+4. Details about some model's version are inspectable in the UI as well
+    ![](./mlflow-ui-model-register-4.png)
+
+{{% /section %}}
 
 ---
 
