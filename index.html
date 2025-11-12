@@ -1320,6 +1320,87 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 </section>
 </section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="a-realistic-mlops-scenario-with-mlflow-pt-1">A realistic MLOps scenario with MLflow (pt. 1)</h2>
+<div class="container w-100 m-0 p-0">
+    <div class="row "><div class="col "><p><img src="scikit-learn-pipeline.png" alt=""></p>
+</div>
+<div class="col "><ul>
+<li>
+<p>A <strong>ML workflow</strong> aimed at creating a <em>classifier</em> for the <a href="https://archive.ics.uci.edu/ml/datasets/adult">Adult Income dataset</a> via <strong>SciKit-Learn pipeline</strong></p>
+<ul>
+<li>full fledged data pre-processing:
+<ol>
+<li>test-train split</li>
+<li>missing values imputation</li>
+<li>categorical features encoding</li>
+<li>feature scaling</li>
+<li>model selection via CV
+<ul>
+<li>among <em>logistic regression</em> and <em>random forests</em></li>
+</ul>
+</li>
+<li>hyper-parameter tuning via grid search</li>
+<li>etc.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Implemented as a <strong>Jupyter notebook</strong> + MLflow</p>
+<ul>
+<li>to discuss shortcomings and possible improvements</li>
+</ul>
+</li>
+<li>
+<p>Jupyter notebook available at: <a href="https://github.com/gciatto/example-mlops/blob/master/mlflow_census_demo.ipynb">https://github.com/gciatto/example-mlops/blob/master/mlflow_census_demo.ipynb</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section>
+<h2 id="a-realistic-mlops-scenario-with-mlflow-pt-2">A realistic MLOps scenario with MLflow (pt. 2)</h2>
+<ol>
+<li>
+<p>UI overview (metadata)
+<img src="./mlflow-ui-adult-jupyter-1.png" alt=""></p>
+<ul>
+<li>notice the <em>nesting</em> of runs</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="a-realistic-mlops-scenario-with-mlflow-pt-2-1">A realistic MLOps scenario with MLflow (pt. 2)</h2>
+<ol start="2">
+<li>
+<p>Comparing metrics across multiple runs
+<img src="./mlflow-ui-adult-jupyter-2.png" alt=""></p>
+<ul>
+<li>notice the many <em>comparative charts</em> available</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="a-realistic-mlops-scenario-with-mlflow-pt-3">A realistic MLOps scenario with MLflow (pt. 3)</h2>
+<ol start="3">
+<li>
+<p>Inspecting the winner model
+<img src="./mlflow-ui-adult-jupyter-3.png" alt=""></p>
+<ul>
+<li>selected model: <em>Random Forest Classifier</em> (registered as <code>adult-best-random-forest</code>)</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="a-realistic-mlops-scenario-with-mlflow-pt-4">A realistic MLOps scenario with MLflow (pt. 4)</h2>
+<h3 id="problems">Problems</h3>
+<p>TBD</p>
+
+</section>
+</section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
 <p>Compiled on: 2025-11-12
