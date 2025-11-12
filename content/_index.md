@@ -1003,7 +1003,7 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
     ```bash
     mlflow models build-docker -m "models:/m-1abbea58e1cf442ab9412b7eae572523" -n iris-classifier-dt:latest
     ```
-    
+
 2. This should output something like:
     ```text
     2025/11/12 16:50:16 INFO mlflow.models.flavor_backend_registry: Selected backend for flavor 'python_function'
@@ -1102,6 +1102,72 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 4. Details about some model's version are inspectable in the UI as well
     ![](./mlflow-ui-model-register-4.png)
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## A realistic MLOps scenario with MLflow (pt. 1)
+
+{{% multicol %}}
+{{% col %}}
+![](scikit-learn-pipeline.png)
+{{% /col %}}
+{{% col %}}
+- A __ML workflow__ aimed at creating a _classifier_ for the [Adult Income dataset](https://archive.ics.uci.edu/ml/datasets/adult) via __SciKit-Learn pipeline__
+    * full fledged data pre-processing:
+        1. test-train split
+        2. missing values imputation
+        3. categorical features encoding
+        4. feature scaling
+        5. model selection via CV
+            + among _logistic regression_ and _random forests_
+        6. hyper-parameter tuning via grid search
+        7. etc.
+
+- Implemented as a __Jupyter notebook__ + MLflow
+    + to discuss shortcomings and possible improvements
+
+- Jupyter notebook available at: <https://github.com/gciatto/example-mlops/blob/master/mlflow_census_demo.ipynb>
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## A realistic MLOps scenario with MLflow (pt. 2)
+
+1. UI overview (metadata)
+    ![](./mlflow-ui-adult-jupyter-1.png)
+
+    - notice the _nesting_ of runs
+
+---
+
+## A realistic MLOps scenario with MLflow (pt. 2)
+
+2. Comparing metrics across multiple runs
+    ![](./mlflow-ui-adult-jupyter-2.png)
+
+    - notice the many _comparative charts_ available
+
+---
+
+## A realistic MLOps scenario with MLflow (pt. 3)
+
+3. Inspecting the winner model
+    ![](./mlflow-ui-adult-jupyter-3.png)
+
+    - selected model: _Random Forest Classifier_ (registered as `adult-best-random-forest`)
+
+---
+
+## A realistic MLOps scenario with MLflow (pt. 4)
+
+### Problems
+
+TBD
 
 {{% /section %}}
 
