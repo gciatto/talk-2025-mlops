@@ -1167,9 +1167,45 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 ### Problems
 
-TBD
+- Jupyter notebooks are _interactive_ by nature
+    + making it hard to __automate__ the workflow execution
+
+- Executing the code is time-consuming: it requires a human operator to __start__ the notebook and __run__ all cells
+    + making it hard to __schedule__ periodic runs (e.g. for model retraining)
+
+- Pictures (if any) are commonly _embedded_ in the notebook itself
+    + (not really the case in this example TBH, but a common practice)
+
+- No code decomposition, poor version control
+    + making it hard to __maintain__ and __extend__ the code
+
+- \[__Critical__\] Parameters are _hard-coded_ in the notebook itself
+    + making it hard to __tune__ the workflow behavior without modifying the code
+
+{{% fragment %}}
+> __Solution:__ organize the code as an _MLflow Project_ (see next slide)
+{{% /fragment %}}
 
 {{% /section %}}
+
+---
+
+## MLflow Projects
+
+<!-- https://mlflow.org/docs/latest/ml/projects/ -->
+
+> MLflow __Projects__ provide a standard format for packaging and sharing _reproducible_ data science code
+
+- Assumption 1: __files are structured__ in a specific way (decomposition of code into _multiple scripts_)
+    ```yaml
+    root-directory-name/
+    ├── MLproject             # Project descriptor file
+    ├── train.py              # Training script
+    ├── validate.py           # Validation script
+    ├── conda.yaml            # Optional: Conda environment (dependencies)
+    ├── python_env.yaml       # Optional: Python environment (alternative to Conda)
+    └── data/                 # Optional: project data and assets
+    ```
 
 ---
 
