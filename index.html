@@ -39,7 +39,7 @@
 
 <img src='./front.png' alt='' style='max-width: 95vw; max-height: 50vh; object-fit: contain;'>
  -->
-<p><span class="hint">(versione presentazione: 2025-11-12
+<p><span class="hint">(versione presentazione: 2025-11-14
 )</span></p>
 </section><section>
 <h2 id="link-a-queste-slide">Link a queste slide</h2>
@@ -1397,13 +1397,66 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </section><section>
 <h2 id="a-realistic-mlops-scenario-with-mlflow-pt-4">A realistic MLOps scenario with MLflow (pt. 4)</h2>
 <h3 id="problems">Problems</h3>
-<p>TBD</p>
+<ul>
+<li>
+<p>Jupyter notebooks are <em>interactive</em> by nature</p>
+<ul>
+<li>making it hard to <strong>automate</strong> the workflow execution</li>
+</ul>
+</li>
+<li>
+<p>Executing the code is time-consuming: it requires a human operator to <strong>start</strong> the notebook and <strong>run</strong> all cells</p>
+<ul>
+<li>making it hard to <strong>schedule</strong> periodic runs (e.g. for model retraining)</li>
+</ul>
+</li>
+<li>
+<p>Pictures (if any) are commonly <em>embedded</em> in the notebook itself</p>
+<ul>
+<li>(not really the case in this example TBH, but a common practice)</li>
+</ul>
+</li>
+<li>
+<p>No code decomposition, poor version control</p>
+<ul>
+<li>making it hard to <strong>maintain</strong> and <strong>extend</strong> the code</li>
+</ul>
+</li>
+<li>
+<p>[<strong>Critical</strong>] Parameters are <em>hard-coded</em> in the notebook itself</p>
+<ul>
+<li>making it hard to <strong>tune</strong> the workflow behavior without modifying the code</li>
+</ul>
+</li>
+</ul>
+<span class="fragment ">
+  <blockquote>
+<p><strong>Solution:</strong> organize the code as an <em>MLflow Project</em> (see next slide)</p>
+</blockquote>
+</span>
 
 </section>
 </section><section>
+<h2 id="mlflow-projects">MLflow Projects</h2>
+<!-- https://mlflow.org/docs/latest/ml/projects/ -->
+<blockquote>
+<p>MLflow <strong>Projects</strong> provide a standard format for packaging and sharing <em>reproducible</em> data science code</p>
+</blockquote>
+<ul>
+<li>Assumption 1: <strong>files are structured</strong> in a specific way (decomposition of code into <em>multiple scripts</em>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">root-directory-name/</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── MLproject            </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Project descriptor file</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── train.py             </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Training script</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── validate.py          </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Validation script</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">├── conda.yaml            # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">Conda environment (dependencies)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">├── python_env.yaml       # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">Python environment (alternative to Conda)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">└── data/                 # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">project data and assets</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div></li>
+</ul>
+</section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
-<p>Compiled on: 2025-11-12
+<p>Compiled on: 2025-11-14
  — <a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> printable version</a></p>
 <p><a href="#toc"><i class="fa fa-undo" aria-hidden="true"></i> back to ToC</a></p>
 </section>
