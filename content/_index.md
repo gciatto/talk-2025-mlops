@@ -1181,6 +1181,7 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 - \[__Critical__\] Parameters are _hard-coded_ in the notebook itself
     + making it hard to __tune__ the workflow behavior without modifying the code
+    + making it hard to __reproduce__ past runs with different parameter settings
 
 {{% fragment %}}
 > __Solution:__ organize the code as an _MLflow Project_ (see next slide)
@@ -1190,22 +1191,262 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 ---
 
-## MLflow Projects
+## MLflow Projects (pt. 1)
 
 <!-- https://mlflow.org/docs/latest/ml/projects/ -->
 
 > MLflow __Projects__ provide a standard format for packaging and sharing _reproducible_ data science code
 
+{{% fragment %}}
 - Assumption 1: __files are structured__ in a specific way (decomposition of code into _multiple scripts_)
     ```yaml
     root-directory-name/
     ├── MLproject             # Project descriptor file
     ├── train.py              # Training script
-    ├── validate.py           # Validation script
+    ├── test.py               # Test script
     ├── conda.yaml            # Optional: Conda environment (dependencies)
     ├── python_env.yaml       # Optional: Python environment (alternative to Conda)
     └── data/                 # Optional: project data and assets
     ```
+
+    - notice that `train.py` and `test.py` are __two separate scripts__
+        + each script is responsible for a _specific task_ in the ML workflow
+        + each script may be _invoked independently_ of the others
+{{% /fragment %}}
+
+---
+
+## MLflow Projects (pt. 2)
+
+- Assumption 2: __enviromental dependencies are declared__ in the `python_env.yaml` file (or in `conda.yaml`)
+    ```yaml
+    python: "^3.13.7"
+    dependencies:
+        - mlflow
+        - scikit-learn
+        - pandas
+        - matplotlib
+        - numpy
+        - requests
+        - jupyter
+        - seaborn
+    ```
+
+---
+
+## MLflow Projects (pt. 3)
+
+- Assumption 3: __ML tasks__ and __their parameters__ are declared via the `MLproject` file
+    ```yaml
+    name: My ML Project
+
+    # Environment specification (choose one)
+    python_env: python_env.yaml
+    # conda_env: conda.yaml
+    # docker_env:
+    #   image: python:3.9
+
+    entry_points:
+        main:
+            parameters:
+                param_file: path
+                param_num: {type: float, default: 0.1}
+                param_int: {type: int, default: 100}
+            command: "python train.py --num {param_num} --int {param_int} {param_file}"
+
+        test:
+            parameters:
+                param_str: {type: str, default: "hello"}
+                param_uri: uri
+            command: "python test.py --uri {param_uri} {param_str}"
+    ```
+
+    - so that one can start _training_ via:
+        ```bash
+        mlflow run . -P param_file=data/input.csv -P param_num=0.2 -P param_int=200
+        # if no -e <entry-point> is given, "main" is assumed by default
+        ```
+    - so that one can start _testing_ via:
+        ```bash
+        mlflow run . -e test -P param_str="world" -P param_uri="models:/my-model/1"
+        ```
+
+---
+
+## MLflow Projects (pt. 4)
+
+- Assumption 4: entry-point scripts (`train.py`, etc.) are __implemented__ to read all _relevant parameters_ from _command-line_
+    ```python
+    # train.py
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", type=str, help="Path to input data file")
+    parser.add_argument("--num", type=float, default=0.1, help="A numeric parameter")
+    parser.add_argument("--int", type=int, default=100, help="An integer parameter")
+    args = parser.parse_args()
+
+    print(f"Training with data from: {args.file}")
+    print(f"Numeric parameter: {args.num}")
+    print(f"Integer parameter: {args.int}")
+
+    # ... rest of the training code ...
+    ```
+
+- Assumption 5: entry-point scripts __use__ _MLflow's Tracking API_ accordingly
+    + similar to what we saw in previous examples
+
+---
+
+{{% section %}}
+
+## MLflow Project _Example_ (pt. 1)
+
+> Code at <https://github.com/gciatto/example-mlops>
+
+(We also exemplify the usage of a _remote_ MLflow Tracking Server)
+
+1. On machine with DNS name `my.mlflow.server.it`, __clone__ the repository, and __start MLflow server__ via _Docker Compose_
+    ```bash
+    # git clone https://github.com/gciatto/example-mlops.git
+    # cd example-mlops
+    docker compose up -d --wait
+    ``` 
+
+    - you may run Docker Compose on your local machine as well, hence using <http://localhost:5000> as tracking server
+
+2. On your __local machine__, clone the repository as well, then set the MLflow Tracking URI accordingly
+    ```bash
+    # git clone https://github.com/gciatto/example-mlops.git
+    # cd example-mlops
+    export MLFLOW_TRACKING_URI="http://my.mlflow.server.it:5000
+    ```
+
+    - in the example, I'll be using <http://pc-ciatto-area40.duckdns.org:5000> as tracking server
+        * not working outside VPN, sorry :)
+
+3. Again on your local machine, you may need to __re-create__ the _Python environment_ to run experiments
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate # on Windows: .venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+---
+
+## MLflow Project Example (pt. 2)
+
+4. Notice the `MLproject` file in the repository root, paying attention to the __entry points__ defined therein, and their _parameters_:
+    ```yaml
+    name: Census Income Prediction Demo
+
+    python_env: python.yaml
+
+    entry_points:
+        train:
+            parameters:
+                model_type: {type: string, default: "both"}
+                test_size: {type: float, default: 0.2}
+                cv_splits: {type: int, default: 3}
+                random_state: {type: int, default: 42}
+                numeric_imputation_strategy: {type: string, default: "median"}
+                numeric_scaling_with_mean: {type: boolean, default: true}
+                categorical_imputation_strategy: {type: string, default: "most_frequent"}
+                ohe_handle_unknown: {type: string, default: "ignore"}
+                sparse_threshold: {type: float, default: 0.3}
+                lr_max_iter: {type: int, default: 1000}
+                lr_C_values: {type: string, default: '[0.1, 1.0, 10.0]'}
+                lr_solvers: {type: string, default: '["lbfgs"]'}
+                rf_n_estimators: {type: string, default: '[150, 300]'}
+                rf_max_depths: {type: string, default: '[null, 12]'}
+            command: |
+                python train.py \
+                    --model-type {model_type} \
+                    --test-size {test_size} \
+                    --cv-splits {cv_splits} \
+                    --random-state {random_state} \
+                    --numeric-imputation-strategy {numeric_imputation_strategy} \
+                    --numeric-scaling-with-mean {numeric_scaling_with_mean} \
+                    --categorical-imputation-strategy {categorical_imputation_strategy} \
+                    --ohe-handle-unknown {ohe_handle_unknown} \
+                    --sparse-threshold {sparse_threshold} \
+                    --lr-max-iter {lr_max_iter} \
+                    --lr-C-values {lr_C_values} \
+                    --lr-solvers {lr_solvers} \
+                    --rf-n-estimators {rf_n_estimators} \
+                    --rf-max-depths {rf_max_depths}
+
+        test:
+            parameters:
+                run_id: {type: string}
+                model_uri: {type: string}
+            command: "python test.py --run-id {run_id} --model-uri {model_uri}"
+    ```
+    
+    - use `python train.py --help` to see details about training script parameters
+    - use `python test.py --help` to see details about testing script parameters
+    - notice the _default values_ for each parameter
+
+---
+
+## MLflow Project Example (pt. 3)
+
+5. Still on your local machine, you may now __run the training__ via MLflow Project API
+    ```bash
+    EXPERIMENT_NAME="adult-classifier-$(date +'%Y-%m-%d-%H-%M')"
+    mlflow run -e train --env-manager=local --experiment-name "$EXPERIMENT_NAME" . -P model_type=both
+    ```
+
+    - this may take some minutes, as the full model selection is performed via _CV_ + _grid search_
+        + you may run multiple times with different `model_type` parameter (either `logistic`, `random_forest`, instead of `both`)
+
+    - the _logs_ of the training script will tell you which __command__ to use for _testing the best model_:
+        ```bash
+        mlflow run -e test --env-manager=local --experiment-name $EXPERIMENT_NAME . -P run_id=<TRAINING_RUN_ID> -P model_uri=models:/<BEST_MODEL_ID>
+        ```
+
+---
+
+## MLflow Project Example (pt. 4)
+
+6. You may access the MLflow UI via the URL of the remote tracking server: <http://my.mlflow.server.it:5000>
+    - in our case: <http://pc-ciatto-area40.duckdns.org:5000>
+
+    ![](mlflow-ui-project-1.png)
+
+---
+
+## MLflow Project Example (pt. 5)
+
+7. You may decide to __re-run the experiment__ with different parameters, e.g.:
+    ```bash
+    # to update the date-time in the experiment name, do:
+    # EXPERIMENT_NAME="adult-classifier-$(date +'%Y-%m-%d-%H-%M')" 
+    mlflow run -e train --env-manager=local --experiment-name "$EXPERIMENT_NAME" . \
+        -P model_type=random_forest \
+        -P test_size=0.25 \
+        -P cv_splits=5 \
+        -P random_state=123
+    ```
+
+---
+
+## MLflow Project Example (pt. 6)
+
+8. You may test the best model on the test set via:
+    ```bash
+    # reuse same EXPERIMENT_NAME as in training step
+    mlflow run -e test --env-manager=local --experiment-name $EXPERIMENT_NAME . \
+        -P run_id=<TRAINING_RUN_ID> \
+        -P model_uri=models:/<BEST_MODEL_ID>
+    ```
+
+    (look at the training script logs to find the exact command)
+
+    - this will result in a _new run_ under the same experiment, with __test__ _metrics logged_ and _charts generated_ accordingly:
+        ![](./mlflow-ui-project-2.png)
+
+{{% /section %}}
 
 ---
 
