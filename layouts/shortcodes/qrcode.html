@@ -1,7 +1,7 @@
 {{- $style := .Get "style" | default "" -}}
 {{- $width := .Get "width" | default 300 -}}
 {{- $height := .Get "height" | default 300 -}}
-{{- $data := .Get "data" | printf "%s" | safeJS -}}
+{{- $data := .Get "data" | default .Site.BaseURL | safeJS -}}
 {{- $seed := sha256 $data | base64Encode -}}
 {{- $image := .Get "image" | default "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" -}}
 {{- $dotsColor := .Get "dotsColor" | default "#000000" -}}
