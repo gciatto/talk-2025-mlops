@@ -1321,6 +1321,10 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
     # git clone https://github.com/gciatto/example-mlops.git
     # cd example-mlops
     export MLFLOW_TRACKING_URI="http://my.mlflow.server.it:5000
+    # or, on Windows (cmd):
+    # set MLFLOW_TRACKING_URI=http://my.mlflow.server.it:5000
+    # or, on Windows (PowerShell):
+    # $env:MLFLOW_TRACKING_URI="http://my.mlflow.server.it:5000"
     ```
 
     - in the example, I'll be using <http://pc-ciatto-area40.duckdns.org:5000> as tracking server
@@ -1502,9 +1506,11 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 
 --- 
 
-## Running example for LLM-based Application
+{{% section %}}
 
-- For the final exam of my __Software Engineering__ course, students must answer open questions about the course topics
+## Running example for LLM-based Application (pt. 1)
+
+- For the final exam of a __Software Engineering__ course, students must answer open questions about the course topics
     ```csv
     CATEGORY,       QUESTION TEXT,                          WEIGHT (DIFFICULTY)
     ############################################################################
@@ -1530,6 +1536,488 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 {{% /fragment %}}
 
 {{% /fragment %}}
+
+---
+
+## Running example for LLM-based Application (pt. 2)
+
+#### Many different __prompt templates__ to be _tried_ for answer generation
+
+- _system prompt_:
+    ```text
+    You are a university professor preparing model answers for a software engineering examination.
+    ```
+
+{{% multicol %}}
+{{% col class="col-3" %}}
+- _user_ prompt 1 (_basic_):
+```text
+Category: {category}
+
+Question: {question}
+
+Difficulty: {weight}/4
+
+Provide a clear and accurate answer suitable for an exam context. 
+Be concise but comprehensive.
+```
+{{% /col %}}
+{{% col class="col-3" %}}
+- _user_ prompt 2 (_concise_):
+```text
+Category: {category}
+
+Question: {question}
+
+Weight: {weight}/4
+
+Answer the question above.
+```
+{{% /col %}}
+{{% col class="col-3" %}}
+- _user_ prompt 3 (_practical_):
+```text
+Category: {category}
+
+Question: {question}
+
+Difficulty: {weight}/4
+
+Provide an answer that:
+1. Explains the concept clearly
+2. Includes at least one concrete example or use case
+3. Relates to real-world software development scenarios
+4. Is easy to understand for someone learning the subject
+```
+{{% /col %}}
+{{% col class="col-3" %}}
+- _user_ prompt 4 (_academic_):
+```text
+Category: {category}
+
+Difficulty: {weight}/4 (higher means more complex)
+
+Question: {question}
+
+Instructions:
+- Provide a rigorous, academically sound answer
+- Include relevant technical terminology
+- Reference key concepts and principles where appropriate
+- Structure your answer clearly with proper explanations
+- Aim for a comprehensive yet focused response suitable for academic evaluation
+```
+{{% /col %}}
+{{% /multicol %}}
+
+- system prompt addendum for _tools_:
+    ```text
+    Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+    In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
+    ```
+
+---
+
+## Running example for LLM-based Application (pt. 3)
+
+#### Many different __evaluation criteria__ to be _tried_ for answer assessment
+
+General criteria:
+
+- \[Guideline] `english`: The answer should be in English.
+- \[Guideline] `software_engineering_related`: The answer is correctly contextualizing the question within the domain of software engineering.
+- \[Guideline] `reference_to_definition`: The answer should reference and/or quote relevant definitions for the concepts mentioned in the question.
+- \[Guideline] `relevance_to_query`: The answer should be relevant to the question asked.
+- \[Custom Score] `enough_words`: More than 10 words in the answer.
+- \[Custom Score] `not_too_many_words`: Less than 1000 words in the answer.
+
+{{% fragment %}}
+Question-specific _correctness_ criteria:
+- For questions 1 (`What is computer science?`)
+    + should mention "_study of computation_", "_algorithms_", "_data structures_", "_software_", "_hardware_"
+    + should __not__ argue that "computer science is the study of computers" 
+- For question 2 (`What is an algorithm?`)
+    + should mention that:
+        1. "an algorithm is a _finite_ sequence of steps/instructions"
+        2. "algorithms accept _inputs_"
+        3. "algorithms produce _outputs_"
+    + should __not__ confuse algorithms with "programs" or "software"
+- etc. for other questions
+{{% /fragment %}}
+
+---
+
+## Running example for LLM-based Application (pt. 4)
+
+### Example: Question 1, with _prompt 1_ and _all criteria_, on model `gpt-4.1-mini`
+
+1. Question 1: `What is computer science?` (weight: `1`, category: `Definition`)
+
+2. Prompt 1 (basic):
+    ```text
+    You are a university professor preparing model answers for a software engineering examination.
+    ```
+
+    ```text
+    Category: Definition
+    Question: What is computer science?
+    Difficulty: 1/4
+
+    Provide a clear and accurate answer suitable for an exam context. Be concise but comprehensive.
+    ```
+
+3. Generated answer:
+    ```text
+    Computer science is the systematic study of computers and computational systems. 
+    It involves understanding algorithms, data structures, software design, programming languages, 
+    and the theoretical foundations of computation, as well as the practical aspects of developing 
+    and applying software and hardware solutions to solve problems.
+    ```
+
+4. Evaluation results:
+    + `english`: passed ✅
+    + `software_engineering_related`: failed ❌ (does not mention "software engineering")
+    + `reference_to_definition`: failed ❌ (does not quote any definition)
+    + `relevance_to_query`: passed ✅
+    + `enough_words`: passed ✅
+    + `not_too_many_words`: passed ✅
+    + Correctness (custom for question 1): passed ✅
+
+---
+
+## Running example for LLM-based Application (pt. 5)
+
+### Example: Question 2, with _prompt 1_, on model `gpt-5-mini`, with __agents & tools__
+
+1. Question 2: `What is an algorithm?` (weight: `1`, category: `Definition`)
+
+2. Prompt 1 (basic) + tools addendum:
+    ```text
+    You are a university professor preparing model answers for a software engineering examination.
+    ```
+
+    ```text
+    Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+    In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
+    ```
+
+    ```text
+    Category: Definition
+    Question: What is an algorithm?
+    Difficulty: 1/4
+
+    Provide a clear and accurate answer suitable for an exam context. Be concise but comprehensive.
+    ```
+
+3. The tool:
+    ```python
+    @tool
+    def web_search_tool(query: str, max_results: int = 3) -> str:
+        """
+        Tool function for LLM to search the web and get formatted results.
+        This combines search_web and format_search_results into a single tool.
+        
+        Args:
+            query: Search query string
+            max_results: Maximum number of results to return (default: 3)
+            
+        Returns:
+            Markdown-formatted enumeration of search results where,
+            for each result, the first line is the title of a Web page with an hyper-ref to the page's URL, 
+            and the second line is a snippet/summary of the content.
+        """
+        results = search_web(query, max_results=max_results)
+        return format_search_results(results)
+    ```
+
+---
+
+## Running example for LLM-based Application (pt. 6)
+
+### Example: Question 2, with _prompt 1_, on model `gpt-5-mini`, with __agents & tools__ (cont'd)
+
+4. Generated intermediate _tool invocation_:
+    ```python
+    web_search_tool("What is an algorithm definition concise exam context computer science", max_results=3)
+    ```
+
+    Result:
+    ```markdown
+    Relevant Web search results:
+
+    - [Wikipedia Algorithm - Wikipedia](https://en.wikipedia.org/wiki/Algorithm) 
+    4 days ago - 
+    In mathematics and computer science, an algorithm ...
+    - [Scribbr What is an algorithm in computer science?](https://www.scribbr.com/frequently-asked-questions/algorithm-computer-science/) 
+    August 9, 2023 - 
+    In computer science, an algorithm is a list of unambiguous instructions ...
+    - ...
+    ```
+
+
+- __Final__ generated answer:
+    ```markdown
+    An algorithm is a finite, well‑defined sequence of unambiguous instructions that, given specified input(s), 
+    produces the desired output(s) and terminates after a finite number of steps.
+    
+    Key properties (for exam answers)
+    - Input and output: takes zero or more inputs and yields one or more outputs.
+    - Finiteness (termination): completes in a finite number of steps for every valid input.
+    - Definiteness (unambiguous): each step is precisely specified.
+    - Effectiveness: each step is basic enough to be carried out in practice.
+    - Correctness: when implemented, it solves the intended problem for all valid inputs.
+
+    Example (brief): the Euclidean algorithm for computing the greatest common divisor of two integers.
+    
+    References:
+    - Wikipedia: Algorithm — <https://en.wikipedia.org/wiki/Algorithm>
+    - Scribbr: What is an algorithm in computer science? — <https://www.scribbr.com/frequently-asked-questions/algorithm-computer-science/>
+    ```
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## Exemplifying MLflow for LLM Applications (pt. 1)
+
+> Code at <https://github.com/gciatto/example-llmops>
+
+1. __Clone__ the repository and __start__ a local MLflow Tracking Server via Docker Compose:
+    ```bash
+    git clone https://github.com/gciatto/example-llmops.git
+    cd example-llmops
+    docker-compose up -d --wait
+    ```
+
+2. Set the _environment variables_ for __MLflow Tracking Server URI__ and __OpenAI API key__:
+    ```bash
+    export MLFLOW_TRACKING_URI="http://localhost:5000"
+    export OPENAI_API_KEY="sk-..."
+    # on Windows (cmd):
+    # set MLFLOW_TRACKING_URI=http://localhost:5000
+    # set OPENAI_API_KEY=sk-...
+    # on Windows (PowerShell):
+    # $env:MLFLOW_TRACKING_URI="http://localhost:5000"
+    # $env:OPENAI_API_KEY="sk-..."
+    ```
+
+3. __Create and activate__ a Python virtual environment, then install dependencies:
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate # on Windows: .venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 2)
+
+4. Have a look to the __project structure__ (Docker and other irrelevant files are omitted):
+    ```bash
+    example-llmops/
+    ├── MLproject                   # MLflow Project descriptor file
+    ├── register_all_prompts.py     # Script to register prompt templates
+    ├── generate_answers.py         # Script to generate answers without agents/tools
+    ├── generate_answers_with_agent.py # Script to generate answers with agents/tools
+    ├── evaluate_responses.py       # Script to evaluate generated responses
+    ├── prompts                     # Directory with prompt templates
+    │   ├── academic.txt
+    │   ├── basic.txt
+    │   ├── concise.txt
+    │   ├── practical.txt
+    │   ├── system.txt
+    │   └── tools.txt
+    ├── python_env.yaml             # Python environment (dependencies)
+    └──  questions.csv              # CSV file with input questions
+    ```
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 3)
+
+5. Notice the `MLproject` file in the repository root, paying attention to the __entry points__ defined therein, and their _parameters_:
+    ```yaml
+    name: quiz-answer-generator
+    
+    python_env: python_env.yaml
+    
+    entry_points:
+      register_all_prompts:
+        command: "python register_all_prompts.py"
+    
+      evaluate_responses:
+        parameters:
+          generation_run_id: {type: str, default: "none"}
+          judge_model: {type: str, default: "openai:/gpt-4.1-mini"}
+        command: "python evaluate_responses.py --generation-run-id {generation_run_id} --judge-model {judge_model}"
+    
+      generate_answers:
+        parameters:
+          prompt_template: {type: str, default: "basic"}
+          max_questions: {type: int, default: -1}
+          model: {type: str, default: "gpt-4.1-mini"}
+          temperature: {type: float, default: 0.7}
+          max_tokens: {type: int, default: 500}
+        command: |
+          python generate_answers.py \
+            --prompt-template {prompt_template} \
+            --max-questions {max_questions} \
+            --model {model} \
+            --temperature {temperature} \
+            --max-tokens {max_tokens}
+      
+      generate_answers_with_agent:
+        parameters:
+          prompt_template: {type: str, default: "basic"}
+          search_results_count: {type: int, default: 3}
+          max_questions: {type: int, default: -1}
+          model: {type: str, default: "gpt-5-mini"}
+          temperature: {type: float, default: 0.7}
+          max_tokens: {type: int, default: 1500}
+        command: |
+          python generate_answers_with_agent.py \
+            --prompt-template {prompt_template} \
+            --search-results-count {search_results_count} \
+            --max-questions {max_questions} \
+            --model {model} \
+            --temperature {temperature} \
+            --max-tokens {max_tokens}
+    ```
+
+    - use `python generate_answers.py --help` to see details about generation script parameters
+    - use `python evaluate_responses.py --help` to see details about evaluation script parameters
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 4)
+
+6. Also give a look to the code in `evaluate_responses.py` script, where _evaluation criteria_ are defined:
+    ```python
+    import mlflow
+    from mlflow.entities import Feedback
+    from mlflow.genai.scorers import Guidelines, scorer, RelevanceToQuery
+    ```
+    ```python
+    @scorer
+    def enough_words(outputs: dict) -> Feedback:
+        text = outputs['choices'][-1]['message']['content']
+        word_count = len(text.split())
+        score = word_count >= 10
+        rationale = (
+            f"The response has more than 10 words: {word_count}"
+            if score
+            else f"The response does not have enough words because it has less than 10 words: {word_count}."
+        )
+        return Feedback(value=score, rationale=rationale)
+    ```
+    ```python
+    @scorer
+    def not_too_many_words(outputs: dict) -> Feedback:
+        text = outputs['choices'][-1]['message']['content']
+        word_count = len(text.split())
+        score = word_count <= 1000
+        rationale = (
+            f"The response has less than 1000 words: {word_count}"
+            if score
+            else f"The response has too many words: {word_count}."
+        )
+        return Feedback(value=score, rationale=rationale)
+    ```
+    ```python
+    def guidelines_model(model: str = None):
+        yield Guidelines(model=model, name="english", guidelines="The answer should be in English.")
+        yield Guidelines(model=model, name="software_engineering_related",
+            guidelines="The answer is correctly contextualizing the question within the domain of software engineering.")
+        yield Guidelines(model=model, name="reference_to_definition",
+            guidelines="The answer should reference and/or quote relevant definitions for the concepts mentioned in the question.")
+        yield RelevanceToQuery(model=model)
+        yield enough_words
+        yield not_too_many_words
+    ```
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 5)
+
+7. You may now __register all prompt templates__ in a _new experiment_ via:
+    ```bash
+    EXPERIMENT_ID="se-answers-$(date +'%Y-%m-%d-%H-%M')"
+    mlflow run -e register_all_prompts --env-manager=local --experiment-name $EXPERIMENT_ID .
+    ```
+
+8. Look at the __MLflow UI__ ("Prompts" main section) to see the _registered prompts_:
+    ![](./mlflow-ui-llms-1a.png)
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 6)
+
+
+9. Clicking on a _prompt template_, you may see its details (versioning, content, etc.):
+    ![](./mlflow-ui-llms-1b.png)
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 7)
+
+10. You may now __generate answers__ via:
+    ```bash
+    mlflow run -e generate_answers --env-manager=local --experiment-name $EXPERIMENT_ID . -P max_questions=4
+    ```
+
+    (we put a limit of 4 questions to save time and costs)
+
+11. Look at the __MLflow UI__ ("Experiments" main section) to see the _generation runs_:
+    ![](./mlflow-ui-llms-2.png)
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 8)
+
+12. Clicking on a __trace__, you may observe details about the __interactions__ with the LLM provider:
+    ![](./mlflow-ui-llms-3.png)
+
+    - notice the _logged prompts_, _responses_, _metrics_, etc.
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 9)
+
+13. You may now __evaluate generated answers__ via (see the output of generation runs for the exact command):
+    ```bash
+    # reuse same EXPERIMENT_ID as in generation step
+    mlflow run -e evaluate_responses --env-manager=local --experiment-id <EXPERIMENT_ID> . -P generation_run_id=<GENERATION_RUN_ID>
+    ```
+
+    (this may take some time, as `Guidelines` evaluations are performed via further LLM queries)
+
+14. Look at the __MLflow UI__ ("Experiments" main section) to see the _evaluation runs_:
+    ![](./mlflow-ui-llms-4.png)
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 10)
+
+15. You may now __generate answers with agents & tools__ via:
+    ```bash
+    EXPERIMENT_ID="se-answers-agents-$(date +'%Y-%m-%d-%H-%M')"
+    mlflow run -e generate_answers_with_agent --env-manager=local --experiment-name $EXPERIMENT_ID . -P max_questions=2
+    ```
+
+    (we put a limit of 2 questions to save time and costs)
+
+16. In the __MLflow UI__, you may inspect which and how many _tool invocations_ were performed:
+    ![](./mlflow-ui-llms-5a.png)
+
+---
+
+## Exemplifying MLflow for LLM Applications (pt. 11)
+
+17. Clicking on the "Details & Timeline" tab, you may profile the entire __data-flow__ back-and-forth between client and LLM provider:
+    ![](./mlflow-ui-llms-5b.png)
+
+{{% /section %}}
 
 ---
 
