@@ -28,7 +28,7 @@
     <section>
 
 <section data-shortcode-section="">
-<h1 id="structure-and-automate-ai-workflows-with-mlops">Structure and Automate AI Workflows with MLOps</h1>
+<h1 id="structure-and-automate-ai-workflows-with-mlops-and-llmops">Structure and Automate AI Workflows with MLOps and LLMOps</h1>
 <p><a href="mailto:giovanni.ciatto@unibo.it">Giovanni Ciatto</a>
 <br> Dipartimento di Informatica — Scienza e Ingegneria (DISI), Sede di Cesena,
 <br> Alma Mater Studiorum—Università di Bologna</p>
@@ -39,10 +39,10 @@
 
 <img src='./front.png' alt='' style='max-width: 95vw; max-height: 50vh; object-fit: contain;'>
  -->
-<p><span class="hint">(versione presentazione: 2025-11-15
+<p><span class="hint">(version: 2025-11-15
 )</span></p>
 </section><section>
-<h2 id="link-a-queste-slide">Link a queste slide</h2>
+<h2 id="link-to-these-slides">Link to these slides</h2>
 <p><a href="https://gciatto.github.io/talk-2025-mlops/">https://gciatto.github.io/talk-2025-mlops/</a></p>
 <div id="ZTI2ZDA3MTYwNWExNjNhN2I0NWQ5MGQyMDJlMjQxYjkyYzI3MTUwYTk5YzRkZTY4MWYyOWIyOTEyMTAwMGZjMg==" style=""></div>
 <script type="text/javascript">
@@ -66,7 +66,7 @@
     });
     qrCode.append(document.getElementById("ZTI2ZDA3MTYwNWExNjNhN2I0NWQ5MGQyMDJlMjQxYjkyYzI3MTUwYTk5YzRkZTY4MWYyOWIyOTEyMTAwMGZjMg=="));
 </script>
-<p><a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> versione stampabile</a></p>
+<p><a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> printable version</a></p>
 </section>
 <section data-noprocess="" data-shortcode-slide="" id="toc">
 <h2 id="outline">Outline</h2>
@@ -617,7 +617,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 </section><section>
 <h2 id="how-does-llmops-support-genai-practitioners">How does LLMOps support GenAI practitioners</h2>
-<p>LLOps adds <em>infrastructure</em> + <em>processes</em> + <em>automation</em> to make each step more reliable:</p>
+<p>LLMOps adds <em>infrastructure</em> + <em>processes</em> + <em>automation</em> to make each step more reliable:</p>
 <ul>
 <li><strong>Foundation models</strong> → <em>catalogs</em> of available models, with metadata on capabilities, costs, and usage policies</li>
 <li><strong>Provider Gateways</strong> → standardized APIs to access different PFM providers (e.g. OpenAI, HuggingFace) uniformly, without code rewrites</li>
@@ -1144,10 +1144,10 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 <ul>
 <li>
-<p>MLflow assists in <strong>model deployment</strong> by <em>mediating the interatction</em> between logged models and their clients</p>
+<p>MLflow assists in <strong>model deployment</strong> by <em>mediating the interaction</em> between logged models and their clients</p>
 <ul>
 <li>clients are assumed to use the models in <em>inference</em> mode (i.e. for prediction serving)</li>
-<li>clinets may be either <strong>command-line tools</strong> or <strong>Web API</strong> consumers</li>
+<li>clients may be either <strong>command-line tools</strong> or <strong>Web API</strong> consumers</li>
 </ul>
 </li>
 <li>
