@@ -1426,6 +1426,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <p>[<strong>Critical</strong>] Parameters are <em>hard-coded</em> in the notebook itself</p>
 <ul>
 <li>making it hard to <strong>tune</strong> the workflow behavior without modifying the code</li>
+<li>making it hard to <strong>reproduce</strong> past runs with different parameter settings</li>
 </ul>
 </li>
 </ul>
@@ -1437,22 +1438,274 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 </section>
 </section><section>
-<h2 id="mlflow-projects">MLflow Projects</h2>
+<h2 id="mlflow-projects-pt-1">MLflow Projects (pt. 1)</h2>
 <!-- https://mlflow.org/docs/latest/ml/projects/ -->
 <blockquote>
 <p>MLflow <strong>Projects</strong> provide a standard format for packaging and sharing <em>reproducible</em> data science code</p>
 </blockquote>
-<ul>
-<li>Assumption 1: <strong>files are structured</strong> in a specific way (decomposition of code into <em>multiple scripts</em>)
+
+
+<span class="fragment ">
+  <ul>
+<li>
+<p>Assumption 1: <strong>files are structured</strong> in a specific way (decomposition of code into <em>multiple scripts</em>)</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">root-directory-name/</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── MLproject            </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Project descriptor file</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── train.py             </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Training script</span><span style="color:#f8f8f8;text-decoration:underline">
-</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── validate.py          </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Validation script</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">├── test.py              </span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># Test script</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">├── conda.yaml            # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">Conda environment (dependencies)</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">├── python_env.yaml       # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">Python environment (alternative to Conda)</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">└── data/                 # Optional</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">project data and assets</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><ul>
+<li>notice that <code>train.py</code> and <code>test.py</code> are <strong>two separate scripts</strong>
+<ul>
+<li>each script is responsible for a <em>specific task</em> in the ML workflow</li>
+<li>each script may be <em>invoked independently</em> of the others</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</span>
+
+</section><section>
+<h2 id="mlflow-projects-pt-2">MLflow Projects (pt. 2)</h2>
+<ul>
+<li>Assumption 2: <strong>enviromental dependencies are declared</strong> in the <code>python_env.yaml</code> file (or in <code>conda.yaml</code>)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"^3.13.7"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">dependencies</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">mlflow</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">scikit-learn</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">pandas</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">matplotlib</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">numpy</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">requests</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">jupyter</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span>- <span style="color:#000">seaborn</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></span></span></code></pre></div></li>
 </ul>
+</section><section>
+<h2 id="mlflow-projects-pt-3">MLflow Projects (pt. 3)</h2>
+<ul>
+<li>
+<p>Assumption 3: <strong>ML tasks</strong> and <strong>their parameters</strong> are declared via the <code>MLproject</code> file</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">My ML Project</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#8f5902;font-style:italic"># Environment specification (choose one)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">python_env.yaml</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#8f5902;font-style:italic"># conda_env: conda.yaml</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#8f5902;font-style:italic"># docker_env:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#8f5902;font-style:italic">#   image: python:3.9</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">entry_points</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">main</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">param_file</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">path</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">param_num</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: float, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">0.1</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">param_int</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">100</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"python train.py --num {param_num} --int {param_int} {param_file}"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">test</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">param_str</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"hello"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">param_uri</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">uri</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"python test.py --uri {param_uri} {param_str}"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><ul>
+<li>so that one can start <em>training</em> via:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -P <span style="color:#000">param_file</span><span style="color:#ce5c00;font-weight:bold">=</span>data/input.csv -P <span style="color:#000">param_num</span><span style="color:#ce5c00;font-weight:bold">=</span>0.2 -P <span style="color:#000">param_int</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">200</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># if no -e &lt;entry-point&gt; is given, "main" is assumed by default</span>
+</span></span></code></pre></div></li>
+<li>so that one can start <em>testing</em> via:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -e <span style="color:#204a87">test</span> -P <span style="color:#000">param_str</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"world"</span> -P <span style="color:#000">param_uri</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"models:/my-model/1"</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+</section><section>
+<h2 id="mlflow-projects-pt-4">MLflow Projects (pt. 4)</h2>
+<ul>
+<li>
+<p>Assumption 4: entry-point scripts (<code>train.py</code>, etc.) are <strong>implemented</strong> to read all <em>relevant parameters</em> from <em>command-line</em></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># train.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">argparse</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">parser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">argparse</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">ArgumentParser</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">parser</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">add_argument</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"file"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">type</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">help</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"Path to input data file"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">parser</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">add_argument</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"--num"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">type</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">float</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">default</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">0.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">help</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"A numeric parameter"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">parser</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">add_argument</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"--int"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">type</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">int</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">default</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">100</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">help</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"An integer parameter"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">args</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">parser</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">parse_args</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">f</span><span style="color:#4e9a06">"Training with data from: </span><span style="color:#4e9a06">{</span><span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">file</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">f</span><span style="color:#4e9a06">"Numeric parameter: </span><span style="color:#4e9a06">{</span><span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">num</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">f</span><span style="color:#4e9a06">"Integer parameter: </span><span style="color:#4e9a06">{</span><span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">int</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">"</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># ... rest of the training code ...</span>
+</span></span></code></pre></div></li>
+<li>
+<p>Assumption 5: entry-point scripts <strong>use</strong> <em>MLflow’s Tracking API</em> accordingly</p>
+<ul>
+<li>similar to what we saw in previous examples</li>
+</ul>
+</li>
+</ul>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="mlflow-project-example-pt-1">MLflow Project <em>Example</em> (pt. 1)</h2>
+<blockquote>
+<p>Code at <a href="https://github.com/gciatto/example-mlops">https://github.com/gciatto/example-mlops</a></p>
+</blockquote>
+<p>(We also exemplify the usage of a <em>remote</em> MLflow Tracking Server)</p>
+<ol>
+<li>
+<p>On machine with DNS name <code>my.mlflow.server.it</code>, <strong>clone</strong> the repository, and <strong>start MLflow server</strong> via <em>Docker Compose</em></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># cd example-mlops</span>
+</span></span><span style="display:flex;"><span>docker compose up -d --wait
+</span></span></code></pre></div><ul>
+<li>you may run Docker Compose on your local machine as well, hence using <a href="http://localhost:5000">http://localhost:5000</a> as tracking server</li>
+</ul>
+</li>
+<li>
+<p>On your <strong>local machine</strong>, clone the repository as well, then set the MLflow Tracking URI accordingly</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># cd example-mlops</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://my.mlflow.server.it:5000
+</span></span></span></code></pre></div><ul>
+<li>in the example, I’ll be using <a href="http://pc-ciatto-area40.duckdns.org:5000">http://pc-ciatto-area40.duckdns.org:5000</a> as tracking server
+<ul>
+<li>not working outside VPN, sorry :)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Again on your local machine, you may need to <strong>re-create</strong> the <em>Python environment</em> to run experiments</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
+</span></span><span style="display:flex;"><span><span style="color:#204a87">source</span> .venv/bin/activate <span style="color:#8f5902;font-style:italic"># on Windows: .venv\Scripts\activate</span>
+</span></span><span style="display:flex;"><span>pip install -r requirements.txt
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="mlflow-project-example-pt-2">MLflow Project Example (pt. 2)</h2>
+<ol start="4">
+<li>
+<p>Notice the <code>MLproject</code> file in the repository root, paying attention to the <strong>entry points</strong> defined therein, and their <em>parameters</em>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">Census Income Prediction Demo</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">python.yaml</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">entry_points</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">train</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">model_type</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"both"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">test_size</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: float, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">0.2</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">cv_splits</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">3</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">random_state</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">42</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">numeric_imputation_strategy</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"median"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">numeric_scaling_with_mean</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: boolean, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">true</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">categorical_imputation_strategy</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"most_frequent"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">ohe_handle_unknown</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"ignore"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">sparse_threshold</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: float, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">0.3</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">lr_max_iter</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">1000</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">lr_C_values</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">'[0.1, 1.0, 10.0]'</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">lr_solvers</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">'["lbfgs"]'</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">rf_n_estimators</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">'[150, 300]'</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">rf_max_depths</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: string, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">'[null, 12]'</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000;font-weight:bold">|</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">            python train.py \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --model-type {model_type} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --test-size {test_size} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --cv-splits {cv_splits} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --random-state {random_state} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --numeric-imputation-strategy {numeric_imputation_strategy} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --numeric-scaling-with-mean {numeric_scaling_with_mean} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --categorical-imputation-strategy {categorical_imputation_strategy} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --ohe-handle-unknown {ohe_handle_unknown} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --sparse-threshold {sparse_threshold} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --lr-max-iter {lr_max_iter} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --lr-C-values {lr_C_values} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --lr-solvers {lr_solvers} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --rf-n-estimators {rf_n_estimators} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">                --rf-max-depths {rf_max_depths}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">test</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">run_id</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">string}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">            </span><span style="color:#204a87;font-weight:bold">model_uri</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">string}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">        </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"python test.py --run-id {run_id} --model-uri {model_uri}"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><ul>
+<li>use <code>python train.py --help</code> to see details about training script parameters</li>
+<li>use <code>python test.py --help</code> to see details about testing script parameters</li>
+<li>notice the <em>default values</em> for each parameter</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="mlflow-project-example-pt-3">MLflow Project Example (pt. 3)</h2>
+<ol start="5">
+<li>
+<p>Still on your local machine, you may now <strong>run the training</strong> via MLflow Project API</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_NAME</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"adult-classifier-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+</span></span><span style="display:flex;"><span>mlflow run -e train --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#4e9a06">"</span><span style="color:#000">$EXPERIMENT_NAME</span><span style="color:#4e9a06">"</span> . -P <span style="color:#000">model_type</span><span style="color:#ce5c00;font-weight:bold">=</span>both
+</span></span></code></pre></div><ul>
+<li>
+<p>this may take some minutes, as the full model selection is performed via <em>CV</em> + <em>grid search</em></p>
+<ul>
+<li>you may run multiple times with different <code>model_type</code> parameter (either <code>logistic</code>, <code>random_forest</code>, instead of <code>both</code>)</li>
+</ul>
+</li>
+<li>
+<p>the <em>logs</em> of the training script will tell you which <strong>command</strong> to use for <em>testing the best model</em>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e <span style="color:#204a87">test</span> --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_NAME</span> . -P <span style="color:#000">run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;TRAINING_RUN_ID&gt; -P <span style="color:#000">model_uri</span><span style="color:#ce5c00;font-weight:bold">=</span>models:/&lt;BEST_MODEL_ID&gt;
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="mlflow-project-example-pt-4">MLflow Project Example (pt. 4)</h2>
+<ol start="6">
+<li>
+<p>You may access the MLflow UI via the URL of the remote tracking server: <a href="http://my.mlflow.server.it:5000">http://my.mlflow.server.it:5000</a></p>
+<ul>
+<li>in our case: <a href="http://pc-ciatto-area40.duckdns.org:5000">http://pc-ciatto-area40.duckdns.org:5000</a></li>
+</ul>
+<p><img src="mlflow-ui-project-1.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="mlflow-project-example-pt-5">MLflow Project Example (pt. 5)</h2>
+<ol start="7">
+<li>You may decide to <strong>re-run the experiment</strong> with different parameters, e.g.:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;to update the date-time in the experiment name, do:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># EXPERIMENT_NAME="adult-classifier-$(date +'%Y-%m-%d-%H-%M')" </span>
+</span></span><span style="display:flex;"><span>mlflow run -e train --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#4e9a06">"</span><span style="color:#000">$EXPERIMENT_NAME</span><span style="color:#4e9a06">"</span> . <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">model_type</span><span style="color:#ce5c00;font-weight:bold">=</span>random_forest <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">test_size</span><span style="color:#ce5c00;font-weight:bold">=</span>0.25 <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">cv_splits</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">5</span> <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">random_state</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">123</span>
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="mlflow-project-example-pt-6">MLflow Project Example (pt. 6)</h2>
+<ol start="8">
+<li>
+<p>You may test the best model on the test set via:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;reuse same EXPERIMENT_NAME as in training step</span>
+</span></span><span style="display:flex;"><span>mlflow run -e <span style="color:#204a87">test</span> --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_NAME</span> . <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;TRAINING_RUN_ID&gt; <span style="color:#4e9a06">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>    -P <span style="color:#000">model_uri</span><span style="color:#ce5c00;font-weight:bold">=</span>models:/&lt;BEST_MODEL_ID&gt;
+</span></span></code></pre></div><p>(look at the training script logs to find the exact command)</p>
+<ul>
+<li>this will result in a <em>new run</em> under the same experiment, with <strong>test</strong> <em>metrics logged</em> and <em>charts generated</em> accordingly:
+<img src="./mlflow-ui-project-2.png" alt=""></li>
+</ul>
+</li>
+</ol>
+
+</section>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
