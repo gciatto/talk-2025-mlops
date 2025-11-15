@@ -9,7 +9,7 @@ outputs = ["Reveal"]
 
 {{% section %}}
 
-# Structure and Automate AI Workflows with MLOps
+# Structure and Automate AI Workflows with MLOps and LLMOps
 
 [Giovanni Ciatto](mailto:giovanni.ciatto@unibo.it)
 <br> Dipartimento di Informatica — Scienza e Ingegneria (DISI), Sede di Cesena,
@@ -17,18 +17,18 @@ outputs = ["Reveal"]
 
 <!-- {{< image src="./front.png" max-h="50vh" >}} -->
 
-<span class="hint">(versione presentazione: {{< today >}})</span>
+<span class="hint">(version: {{< today >}})</span>
 
 
 ---
 
-## Link a queste slide
+## Link to these slides
 
 <{{< slides-url >}}>
 
 {{< qrcode >}}
 
-[<i class="fa fa-print" aria-hidden="true"></i> versione stampabile](?print-pdf&pdfSeparateFragments=false)
+[<i class="fa fa-print" aria-hidden="true"></i> printable version](?print-pdf&pdfSeparateFragments=false)
 
 ---
 
@@ -468,7 +468,7 @@ Engineering _prompts_, _tools_, _vector stores_, and _agents_ to constrain and g
 
 ## How does LLMOps support GenAI practitioners
 
-LLOps adds _infrastructure_ + _processes_ + _automation_ to make each step more reliable:
+LLMOps adds _infrastructure_ + _processes_ + _automation_ to make each step more reliable:
 - __Foundation models__ → _catalogs_ of available models, with metadata on capabilities, costs, and usage policies
 - __Provider Gateways__ → standardized APIs to access different PFM providers (e.g. OpenAI, HuggingFace) uniformly, without code rewrites
 - __Prompt engineering__ → _version control_ for prompt templates, systematic testing frameworks
@@ -927,9 +927,9 @@ Notice that, in set-up 3, there could be up to _three servers_ involved:
 <!-- ![](./mlflow-serving.png) -->
 {{< image src="./mlflow-serving.png" width="100%" max-h="40vh" >}}
 
-- MLflow assists in __model deployment__ by _mediating the interatction_ between logged models and their clients
+- MLflow assists in __model deployment__ by _mediating the interaction_ between logged models and their clients
     + clients are assumed to use the models in _inference_ mode (i.e. for prediction serving)
-    + clinets may be either __command-line tools__ or __Web API__ consumers
+    + clients may be either __command-line tools__ or __Web API__ consumers
 
 - MLflow automates the creation of __container images__ for the sake of model deployment
     + these images may be deployed on common _cloud platforms_ (e.g. AWS SageMaker, Azure ML, Google Cloud AI Platform, etc.)
