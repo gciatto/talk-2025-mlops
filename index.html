@@ -1576,6 +1576,10 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># cd example-mlops</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://my.mlflow.server.it:5000
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"># or, on Windows (cmd):
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"># set MLFLOW_TRACKING_URI=http://my.mlflow.server.it:5000
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"># or, on Windows (PowerShell):
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"># </span><span style="color:#000">$env</span><span style="color:#4e9a06">:MLFLOW_TRACKING_URI="</span>http://my.mlflow.server.it:5000<span style="color:#4e9a06">"
 </span></span></span></code></pre></div><ul>
 <li>in the example, I’ll be using <a href="http://pc-ciatto-area40.duckdns.org:5000">http://pc-ciatto-area40.duckdns.org:5000</a> as tracking server
 <ul>
@@ -1784,9 +1788,12 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 
 </section>
 </section><section>
-<h2 id="running-example-for-llm-based-application">Running example for LLM-based Application</h2>
+
+
+<section data-shortcode-section="">
+<h2 id="running-example-for-llm-based-application-pt-1">Running example for LLM-based Application (pt. 1)</h2>
 <ul>
-<li>For the final exam of my <strong>Software Engineering</strong> course, students must answer open questions about the course topics
+<li>For the final exam of a <strong>Software Engineering</strong> course, students must answer open questions about the course topics
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#4e9a06">CATEGORY</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">       QUESTION TEXT</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                          WEIGHT (DIFFICULTY)</span><span style="color:#000;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold"></span><span style="color:#4e9a06">############################################################################</span><span style="color:#000;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold"></span><span style="color:#4e9a06">Definition</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">     What is computer science?</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                  1</span><span style="color:#000;font-weight:bold">
@@ -1802,8 +1809,6 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </ul>
 </li>
 </ul>
-
-
 <span class="fragment ">
   <blockquote>
 <p><em>Idea!</em> Let’s generate <strong>examples of good answers</strong> via LLMs and provide students with them</p>
@@ -1821,9 +1826,458 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <p>MLflow may help in 1. selecting the <em>best models</em> and 2. <em>prompts</em>, assuming that 3. <em>evaluation metrics</em> are defined for generated answers</p>
 </blockquote>
 </span>
-
 </span>
+</section><section>
+<h2 id="running-example-for-llm-based-application-pt-2">Running example for LLM-based Application (pt. 2)</h2>
+<h4 id="many-different-prompt-templates-to-be-tried-for-answer-generation">Many different <strong>prompt templates</strong> to be <em>tried</em> for answer generation</h4>
+<ul>
+<li><em>system prompt</em>:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+</span></span></code></pre></div></li>
+</ul>
+<div class="container w-100 m-0 p-0">
+    <div class="row "><div class="col col-3"><ul>
+<li><em>user</em> prompt 1 (<em>basic</em>):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Question: {question}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Difficulty: {weight}/4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Provide a clear and accurate answer suitable for an exam context. 
+</span></span><span style="display:flex;"><span>Be concise but comprehensive.
+</span></span></code></pre></div></div>
+<div class="col col-3"><ul>
+<li><em>user</em> prompt 2 (<em>concise</em>):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Question: {question}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Weight: {weight}/4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Answer the question above.
+</span></span></code></pre></div></div>
+<div class="col col-3"><ul>
+<li><em>user</em> prompt 3 (<em>practical</em>):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Question: {question}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Difficulty: {weight}/4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Provide an answer that:
+</span></span><span style="display:flex;"><span>1. Explains the concept clearly
+</span></span><span style="display:flex;"><span>2. Includes at least one concrete example or use case
+</span></span><span style="display:flex;"><span>3. Relates to real-world software development scenarios
+</span></span><span style="display:flex;"><span>4. Is easy to understand for someone learning the subject
+</span></span></code></pre></div></div>
+<div class="col col-3"><ul>
+<li><em>user</em> prompt 4 (<em>academic</em>):</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Difficulty: {weight}/4 (higher means more complex)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Question: {question}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Instructions:
+</span></span><span style="display:flex;"><span>- Provide a rigorous, academically sound answer
+</span></span><span style="display:flex;"><span>- Include relevant technical terminology
+</span></span><span style="display:flex;"><span>- Reference key concepts and principles where appropriate
+</span></span><span style="display:flex;"><span>- Structure your answer clearly with proper explanations
+</span></span><span style="display:flex;"><span>- Aim for a comprehensive yet focused response suitable for academic evaluation
+</span></span></code></pre></div></div>
+</div>
+</div>
+<ul>
+<li>system prompt addendum for <em>tools</em>:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+</span></span><span style="display:flex;"><span>In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
+</span></span></code></pre></div></li>
+</ul>
+</section><section>
+<h2 id="running-example-for-llm-based-application-pt-3">Running example for LLM-based Application (pt. 3)</h2>
+<h4 id="many-different-evaluation-criteria-to-be-tried-for-answer-assessment">Many different <strong>evaluation criteria</strong> to be <em>tried</em> for answer assessment</h4>
+<p>General criteria:</p>
+<ul>
+<li>[Guideline] <code>english</code>: The answer should be in English.</li>
+<li>[Guideline] <code>software_engineering_related</code>: The answer is correctly contextualizing the question within the domain of software engineering.</li>
+<li>[Guideline] <code>reference_to_definition</code>: The answer should reference and/or quote relevant definitions for the concepts mentioned in the question.</li>
+<li>[Guideline] <code>relevance_to_query</code>: The answer should be relevant to the question asked.</li>
+<li>[Custom Score] <code>enough_words</code>: More than 10 words in the answer.</li>
+<li>[Custom Score] <code>not_too_many_words</code>: Less than 1000 words in the answer.</li>
+</ul>
+<span class="fragment ">
+  <p>Question-specific <em>correctness</em> criteria:</p>
+<ul>
+<li>For questions 1 (<code>What is computer science?</code>)
+<ul>
+<li>should mention “<em>study of computation</em>”, “<em>algorithms</em>”, “<em>data structures</em>”, “<em>software</em>”, “<em>hardware</em>”</li>
+<li>should <strong>not</strong> argue that “computer science is the study of computers”</li>
+</ul>
+</li>
+<li>For question 2 (<code>What is an algorithm?</code>)
+<ul>
+<li>should mention that:
+<ol>
+<li>“an algorithm is a <em>finite</em> sequence of steps/instructions”</li>
+<li>“algorithms accept <em>inputs</em>”</li>
+<li>“algorithms produce <em>outputs</em>”</li>
+</ol>
+</li>
+<li>should <strong>not</strong> confuse algorithms with “programs” or “software”</li>
+</ul>
+</li>
+<li>etc. for other questions</li>
+</ul>
+</span>
+</section><section>
+<h2 id="running-example-for-llm-based-application-pt-4">Running example for LLM-based Application (pt. 4)</h2>
+<h3 id="example-question-1-with-prompt-1-and-all-criteria-on-model-gpt-41-mini">Example: Question 1, with <em>prompt 1</em> and <em>all criteria</em>, on model <code>gpt-4.1-mini</code></h3>
+<ol>
+<li>
+<p>Question 1: <code>What is computer science?</code> (weight: <code>1</code>, category: <code>Definition</code>)</p>
+</li>
+<li>
+<p>Prompt 1 (basic):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
+</span></span><span style="display:flex;"><span>Question: What is computer science?
+</span></span><span style="display:flex;"><span>Difficulty: 1/4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Provide a clear and accurate answer suitable for an exam context. Be concise but comprehensive.
+</span></span></code></pre></div></li>
+<li>
+<p>Generated answer:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Computer science is the systematic study of computers and computational systems. 
+</span></span><span style="display:flex;"><span>It involves understanding algorithms, data structures, software design, programming languages, 
+</span></span><span style="display:flex;"><span>and the theoretical foundations of computation, as well as the practical aspects of developing 
+</span></span><span style="display:flex;"><span>and applying software and hardware solutions to solve problems.
+</span></span></code></pre></div></li>
+<li>
+<p>Evaluation results:</p>
+<ul>
+<li><code>english</code>: passed ✅</li>
+<li><code>software_engineering_related</code>: failed ❌ (does not mention “software engineering”)</li>
+<li><code>reference_to_definition</code>: failed ❌ (does not quote any definition)</li>
+<li><code>relevance_to_query</code>: passed ✅</li>
+<li><code>enough_words</code>: passed ✅</li>
+<li><code>not_too_many_words</code>: passed ✅</li>
+<li>Correctness (custom for question 1): passed ✅</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="running-example-for-llm-based-application-pt-5">Running example for LLM-based Application (pt. 5)</h2>
+<h3 id="example-question-2-with-prompt-1-on-model-gpt-5-mini-with-agents--tools">Example: Question 2, with <em>prompt 1</em>, on model <code>gpt-5-mini</code>, with <strong>agents &amp; tools</strong></h3>
+<ol>
+<li>
+<p>Question 2: <code>What is an algorithm?</code> (weight: <code>1</code>, category: <code>Definition</code>)</p>
+</li>
+<li>
+<p>Prompt 1 (basic) + tools addendum:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+</span></span><span style="display:flex;"><span>In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
+</span></span><span style="display:flex;"><span>Question: What is an algorithm?
+</span></span><span style="display:flex;"><span>Difficulty: 1/4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Provide a clear and accurate answer suitable for an exam context. Be concise but comprehensive.
+</span></span></code></pre></div></li>
+<li>
+<p>The tool:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@tool</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">web_search_tool</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">query</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">int</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#4e9a06">"""
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    Tool function for LLM to search the web and get formatted results.
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    This combines search_web and format_search_results into a single tool.
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        query: Search query string
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        max_results: Maximum number of results to return (default: 3)
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        Markdown-formatted enumeration of search results where,
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        for each result, the first line is the title of a Web page with an hyper-ref to the page's URL, 
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        and the second line is a snippet/summary of the content.
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    """</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">results</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">search_web</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">query</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">max_results</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">format_search_results</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">results</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="running-example-for-llm-based-application-pt-6">Running example for LLM-based Application (pt. 6)</h2>
+<h3 id="example-question-2-with-prompt-1-on-model-gpt-5-mini-with-agents--tools-contd">Example: Question 2, with <em>prompt 1</em>, on model <code>gpt-5-mini</code>, with <strong>agents &amp; tools</strong> (cont’d)</h3>
+<ol start="4">
+<li>
+<p>Generated intermediate <em>tool invocation</em>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">web_search_tool</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"What is an algorithm definition concise exam context computer science"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><p>Result:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Relevant Web search results:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> [<span style="color:#204a87;font-weight:bold">Wikipedia Algorithm - Wikipedia</span>](<span style="color:#c4a000">https://en.wikipedia.org/wiki/Algorithm</span>) 
+</span></span><span style="display:flex;"><span>4 days ago - 
+</span></span><span style="display:flex;"><span>In mathematics and computer science, an algorithm ...
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> [<span style="color:#204a87;font-weight:bold">Scribbr What is an algorithm in computer science?</span>](<span style="color:#c4a000">https://www.scribbr.com/frequently-asked-questions/algorithm-computer-science/</span>) 
+</span></span><span style="display:flex;"><span>August 9, 2023 - 
+</span></span><span style="display:flex;"><span>In computer science, an algorithm is a list of unambiguous instructions ...
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> ...
+</span></span></code></pre></div></li>
+</ol>
+<ul>
+<li><strong>Final</strong> generated answer:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>An algorithm is a finite, well‑defined sequence of unambiguous instructions that, given specified input(s), 
+</span></span><span style="display:flex;"><span>produces the desired output(s) and terminates after a finite number of steps.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Key properties (for exam answers)
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Input and output: takes zero or more inputs and yields one or more outputs.
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Finiteness (termination): completes in a finite number of steps for every valid input.
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Definiteness (unambiguous): each step is precisely specified.
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Effectiveness: each step is basic enough to be carried out in practice.
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Correctness: when implemented, it solves the intended problem for all valid inputs.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Example (brief): the Euclidean algorithm for computing the greatest common divisor of two integers.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>References:
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Wikipedia: Algorithm — &lt;https://en.wikipedia.org/wiki/Algorithm&gt;
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> Scribbr: What is an algorithm in computer science? — &lt;https://www.scribbr.com/frequently-asked-questions/algorithm-computer-science/&gt;
+</span></span></code></pre></div></li>
+</ul>
 
+</section>
+</section><section>
+
+
+<section data-shortcode-section="">
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-1">Exemplifying MLflow for LLM Applications (pt. 1)</h2>
+<blockquote>
+<p>Code at <a href="https://github.com/gciatto/example-llmops">https://github.com/gciatto/example-llmops</a></p>
+</blockquote>
+<ol>
+<li>
+<p><strong>Clone</strong> the repository and <strong>start</strong> a local MLflow Tracking Server via Docker Compose:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>git clone https://github.com/gciatto/example-llmops.git
+</span></span><span style="display:flex;"><span><span style="color:#204a87">cd</span> example-llmops
+</span></span><span style="display:flex;"><span>docker-compose up -d --wait
+</span></span></code></pre></div></li>
+<li>
+<p>Set the <em>environment variables</em> for <strong>MLflow Tracking Server URI</strong> and <strong>OpenAI API key</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://localhost:5000"</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">OPENAI_API_KEY</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"sk-..."</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># on Windows (cmd):</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># set MLFLOW_TRACKING_URI=http://localhost:5000</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># set OPENAI_API_KEY=sk-...</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># on Windows (PowerShell):</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># $env:MLFLOW_TRACKING_URI="http://localhost:5000"</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># $env:OPENAI_API_KEY="sk-..."</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Create and activate</strong> a Python virtual environment, then install dependencies:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
+</span></span><span style="display:flex;"><span><span style="color:#204a87">source</span> .venv/bin/activate <span style="color:#8f5902;font-style:italic"># on Windows: .venv\Scripts\activate</span>
+</span></span><span style="display:flex;"><span>pip install -r requirements.txt
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-2">Exemplifying MLflow for LLM Applications (pt. 2)</h2>
+<ol start="4">
+<li>Have a look to the <strong>project structure</strong> (Docker and other irrelevant files are omitted):
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>example-llmops/
+</span></span><span style="display:flex;"><span>├── MLproject                   <span style="color:#8f5902;font-style:italic"># MLflow Project descriptor file</span>
+</span></span><span style="display:flex;"><span>├── register_all_prompts.py     <span style="color:#8f5902;font-style:italic"># Script to register prompt templates</span>
+</span></span><span style="display:flex;"><span>├── generate_answers.py         <span style="color:#8f5902;font-style:italic"># Script to generate answers without agents/tools</span>
+</span></span><span style="display:flex;"><span>├── generate_answers_with_agent.py <span style="color:#8f5902;font-style:italic"># Script to generate answers with agents/tools</span>
+</span></span><span style="display:flex;"><span>├── evaluate_responses.py       <span style="color:#8f5902;font-style:italic"># Script to evaluate generated responses</span>
+</span></span><span style="display:flex;"><span>├── prompts                     <span style="color:#8f5902;font-style:italic"># Directory with prompt templates</span>
+</span></span><span style="display:flex;"><span>│   ├── academic.txt
+</span></span><span style="display:flex;"><span>│   ├── basic.txt
+</span></span><span style="display:flex;"><span>│   ├── concise.txt
+</span></span><span style="display:flex;"><span>│   ├── practical.txt
+</span></span><span style="display:flex;"><span>│   ├── system.txt
+</span></span><span style="display:flex;"><span>│   └── tools.txt
+</span></span><span style="display:flex;"><span>├── python_env.yaml             <span style="color:#8f5902;font-style:italic"># Python environment (dependencies)</span>
+</span></span><span style="display:flex;"><span>└──  questions.csv              <span style="color:#8f5902;font-style:italic"># CSV file with input questions</span>
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-3">Exemplifying MLflow for LLM Applications (pt. 3)</h2>
+<ol start="5">
+<li>
+<p>Notice the <code>MLproject</code> file in the repository root, paying attention to the <strong>entry points</strong> defined therein, and their <em>parameters</em>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">quiz-answer-generator</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">python_env.yaml</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">entry_points</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">register_all_prompts</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"python register_all_prompts.py"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">evaluate_responses</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">generation_run_id</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"none"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">judge_model</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"openai:/gpt-4.1-mini"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"python evaluate_responses.py --generation-run-id {generation_run_id} --judge-model {judge_model}"</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">generate_answers</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">prompt_template</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"basic"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">max_questions</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>-<span style="color:#0000cf;font-weight:bold">1</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">model</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"gpt-4.1-mini"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">temperature</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: float, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">0.7</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">max_tokens</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">500</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000;font-weight:bold">|</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">      python generate_answers.py \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --prompt-template {prompt_template} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --max-questions {max_questions} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --model {model} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --temperature {temperature} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --max-tokens {max_tokens}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">generate_answers_with_agent</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">parameters</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">prompt_template</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"basic"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">search_results_count</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">3</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">max_questions</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>-<span style="color:#0000cf;font-weight:bold">1</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">model</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: str, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">"gpt-5-mini"</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">temperature</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: float, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">0.7</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">      </span><span style="color:#204a87;font-weight:bold">max_tokens</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span>{<span style="color:#204a87;font-weight:bold">type: int, default</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#0000cf;font-weight:bold">1500</span>}<span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000;font-weight:bold">|</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">      python generate_answers_with_agent.py \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --prompt-template {prompt_template} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --search-results-count {search_results_count} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --max-questions {max_questions} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --model {model} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --temperature {temperature} \
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">        --max-tokens {max_tokens}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></span></span></code></pre></div><ul>
+<li>use <code>python generate_answers.py --help</code> to see details about generation script parameters</li>
+<li>use <code>python evaluate_responses.py --help</code> to see details about evaluation script parameters</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-4">Exemplifying MLflow for LLM Applications (pt. 4)</h2>
+<ol start="6">
+<li>Also give a look to the code in <code>evaluate_responses.py</code> script, where <em>evaluation criteria</em> are defined:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">mlflow</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">mlflow.entities</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">Feedback</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">mlflow.genai.scorers</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">scorer</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">RelevanceToQuery</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">enough_words</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">dict</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">text</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">[</span><span style="color:#4e9a06">'choices'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'message'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'content'</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">text</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">split</span><span style="color:#000;font-weight:bold">())</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">score</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#0000cf;font-weight:bold">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">rationale</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response has more than 10 words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">"</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">score</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response does not have enough words because it has less than 10 words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">."</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">score</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">rationale</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">rationale</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">not_too_many_words</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">dict</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">text</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">[</span><span style="color:#4e9a06">'choices'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'message'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'content'</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">text</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">split</span><span style="color:#000;font-weight:bold">())</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">score</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">&lt;=</span> <span style="color:#0000cf;font-weight:bold">1000</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">rationale</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response has less than 1000 words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">"</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">score</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response has too many words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">."</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">score</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">rationale</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">rationale</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">guidelines_model</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">str</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">None</span><span style="color:#000;font-weight:bold">):</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"english"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">guidelines</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"The answer should be in English."</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"software_engineering_related"</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">guidelines</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"The answer is correctly contextualizing the question within the domain of software engineering."</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"reference_to_definition"</span><span style="color:#000;font-weight:bold">,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">guidelines</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"The answer should reference and/or quote relevant definitions for the concepts mentioned in the question."</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">RelevanceToQuery</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">enough_words</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">not_too_many_words</span>
+</span></span></code></pre></div></li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-5">Exemplifying MLflow for LLM Applications (pt. 5)</h2>
+<ol start="7">
+<li>
+<p>You may now <strong>register all prompt templates</strong> in a <em>new experiment</em> via:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+</span></span><span style="display:flex;"><span>mlflow run -e register_all_prompts --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> .
+</span></span></code></pre></div></li>
+<li>
+<p>Look at the <strong>MLflow UI</strong> (“Prompts” main section) to see the <em>registered prompts</em>:
+<img src="./mlflow-ui-llms-1a.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-6">Exemplifying MLflow for LLM Applications (pt. 6)</h2>
+<ol start="9">
+<li>Clicking on a <em>prompt template</em>, you may see its details (versioning, content, etc.):
+<img src="./mlflow-ui-llms-1b.png" alt=""></li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-7">Exemplifying MLflow for LLM Applications (pt. 7)</h2>
+<ol start="10">
+<li>
+<p>You may now <strong>generate answers</strong> via:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e generate_answers --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> . -P <span style="color:#000">max_questions</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">4</span>
+</span></span></code></pre></div><p>(we put a limit of 4 questions to save time and costs)</p>
+</li>
+<li>
+<p>Look at the <strong>MLflow UI</strong> (“Experiments” main section) to see the <em>generation runs</em>:
+<img src="./mlflow-ui-llms-2.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-8">Exemplifying MLflow for LLM Applications (pt. 8)</h2>
+<ol start="12">
+<li>
+<p>Clicking on a <strong>trace</strong>, you may observe details about the <strong>interactions</strong> with the LLM provider:
+<img src="./mlflow-ui-llms-3.png" alt=""></p>
+<ul>
+<li>notice the <em>logged prompts</em>, <em>responses</em>, <em>metrics</em>, etc.</li>
+</ul>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-9">Exemplifying MLflow for LLM Applications (pt. 9)</h2>
+<ol start="13">
+<li>
+<p>You may now <strong>evaluate generated answers</strong> via (see the output of generation runs for the exact command):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># reuse same EXPERIMENT_ID as in generation step</span>
+</span></span><span style="display:flex;"><span>mlflow run -e evaluate_responses --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-id &lt;EXPERIMENT_ID&gt; . -P <span style="color:#000">generation_run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;GENERATION_RUN_ID&gt;
+</span></span></code></pre></div><p>(this may take some time, as <code>Guidelines</code> evaluations are performed via further LLM queries)</p>
+</li>
+<li>
+<p>Look at the <strong>MLflow UI</strong> (“Experiments” main section) to see the <em>evaluation runs</em>:
+<img src="./mlflow-ui-llms-4.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-10">Exemplifying MLflow for LLM Applications (pt. 10)</h2>
+<ol start="15">
+<li>
+<p>You may now <strong>generate answers with agents &amp; tools</strong> via:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-agents-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+</span></span><span style="display:flex;"><span>mlflow run -e generate_answers_with_agent --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> . -P <span style="color:#000">max_questions</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">2</span>
+</span></span></code></pre></div><p>(we put a limit of 2 questions to save time and costs)</p>
+</li>
+<li>
+<p>In the <strong>MLflow UI</strong>, you may inspect which and how many <em>tool invocations</em> were performed:
+<img src="./mlflow-ui-llms-5a.png" alt=""></p>
+</li>
+</ol>
+</section><section>
+<h2 id="exemplifying-mlflow-for-llm-applications-pt-11">Exemplifying MLflow for LLM Applications (pt. 11)</h2>
+<ol start="17">
+<li>Clicking on the “Details &amp; Timeline” tab, you may profile the entire <strong>data-flow</strong> back-and-forth between client and LLM provider:
+<img src="./mlflow-ui-llms-5b.png" alt=""></li>
+</ol>
+
+</section>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
