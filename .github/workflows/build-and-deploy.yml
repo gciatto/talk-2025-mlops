@@ -91,11 +91,11 @@ jobs:
       contents: write
     steps:
       - name: Checkout the PDF creation script
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           submodules: recursive
       - name: Checkout the current website
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           path: pages
