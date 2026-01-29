@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head>
-	<meta name="generator" content="Hugo 0.154.5">
+	<meta name="generator" content="Hugo 0.155.0">
     <meta charset="utf-8">
 <title>Structure and Automate AI Workflows with MLOps</title>
 <meta name="description" content="Introduction to ML- and LLM-Ops">
@@ -39,7 +39,7 @@
 
 <img src='./front.png' alt='' style='max-width: 95vw; max-height: 50vh; object-fit: contain;'>
  -->
-<p><span class="hint">(version: 2026-01-23
+<p><span class="hint">(version: 2026-01-29
 )</span></p>
 </section><section>
 <h2 id="link-to-these-slides">Link to these slides</h2>
@@ -818,11 +818,11 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>Install MLflow into your Python environment</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>pip install mlflow
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>pip install mlflow
 </span></span></code></pre></div></li>
 <li>
 <p>Consider the following dummy script:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">sys</span> <span style="color:#8f5902;font-style:italic"># to read command-line arguments</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">sys</span> <span style="color:#8f5902;font-style:italic"># to read command-line arguments</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">tempfile</span> <span style="color:#8f5902;font-style:italic"># to save generated files into temporary directories</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">mlflow</span> <span style="color:#8f5902;font-style:italic"># to use MLflow functionalities</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">random</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">Random</span> <span style="color:#8f5902;font-style:italic"># to generate random numbers with controlled seed</span>
@@ -859,17 +859,17 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="3">
 <li>
 <p>Let’s run the experiment <em>twice</em>, with <strong>different seeds</strong>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python logging_example.py <span style="color:#0000cf;font-weight:bold">42</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python logging_example.py <span style="color:#0000cf;font-weight:bold">42</span>
 </span></span><span style="display:flex;"><span>python logging_example.py <span style="color:#0000cf;font-weight:bold">43</span>
 </span></span></code></pre></div></li>
 <li>
 <p>The <strong>1st</strong> <em>successful</em> run shall output something like:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/10 11:44:49 INFO mlflow.tracking.fluent: Experiment with name 'logging_example' does not exist. Creating a new experiment.
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/10 11:44:49 INFO mlflow.tracking.fluent: Experiment with name 'logging_example' does not exist. Creating a new experiment.
 </span></span><span style="display:flex;"><span>Started MLflow run with ID: 378f18735f6d4abd8abeba76f4029bea in experiment ID: 931233098002846893
 </span></span></code></pre></div></li>
 <li>
 <p>The <strong>2nd</strong> <em>failing</em> run shall output something like:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Started MLflow run with ID: 9b52b7b7416e423ca9c878fba9b5c667 in experiment ID: 931233098002846893
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Started MLflow run with ID: 9b52b7b7416e423ca9c878fba9b5c667 in experiment ID: 931233098002846893
 </span></span><span style="display:flex;"><span>Traceback (most recent call last):
 </span></span><span style="display:flex;"><span>File "/home/gciatto/Work/Code/example-mlops/mlflow_tracking.py", line 28, in &lt;module&gt;
 </span></span><span style="display:flex;"><span>    raise ValueError("Let the run fail for odd seeds!")
@@ -877,7 +877,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p>Look at your file system, notice that a new <code>mlruns/</code> folder has appeared next to Python script:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlruns
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlruns
 </span></span><span style="display:flex;"><span>├── 931233098002846893
 </span></span><span style="display:flex;"><span>│   ├── 378f18735f6d4abd8abeba76f4029bea
 </span></span><span style="display:flex;"><span>│   │   ├── artifacts
@@ -928,7 +928,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="7">
 <li>
 <p>Let’s now start the <strong>MLflow Web UI</strong> via the following command, to <em>visualize</em> the experiment runs:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow ui
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow ui
 </span></span></code></pre></div><p>then browse to <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> in your favorite browser</p>
 </li>
 <li>
@@ -1000,7 +1000,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="autologging-apis-pt-1">Autologging APIs (pt. 1)</h2>
 <ol>
 <li>Consider the following script, aimed at training a <a href="https://scikit-learn.org/stable/modules/tree.html">decision tree classifier</a> for the <a href="https://it.wikipedia.org/wiki/Dataset_Iris">Iris dataset</a>, via <a href="https://scikit-learn.org">SciKit-Learn library</a>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">sklearn.datasets</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">load_iris</span> <span style="color:#8f5902;font-style:italic"># to load the iris dataset</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">sklearn.datasets</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">load_iris</span> <span style="color:#8f5902;font-style:italic"># to load the iris dataset</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">sklearn.tree</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">DecisionTreeClassifier</span> <span style="color:#8f5902;font-style:italic"># to use decision tree classifier</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">mlflow</span> <span style="color:#8f5902;font-style:italic"># to use MLflow functionalities</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">sys</span> <span style="color:#8f5902;font-style:italic"># to read command-line arguments</span>
@@ -1030,11 +1030,11 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>Let’s run the experiment <em>once</em>, with default seed:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python autologging_example.py
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python autologging_example.py
 </span></span></code></pre></div></li>
 <li>
 <p>The run shall output something like:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/11 16:27:49 INFO mlflow.tracking.fluent: Experiment with name 'autologging-example' does not exist. Creating a new experiment.
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/11 16:27:49 INFO mlflow.tracking.fluent: Experiment with name 'autologging-example' does not exist. Creating a new experiment.
 </span></span><span style="display:flex;"><span>2025/11/11 16:27:50 INFO mlflow.tracking.fluent: Autologging successfully enabled for sklearn.
 </span></span><span style="display:flex;"><span>Training accuracy: 1.0
 </span></span></code></pre></div></li>
@@ -1170,7 +1170,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>Download the file <code>serving_input_example.json</code> locally</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">"inputs"</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">[</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">5.1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.5</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0.2</span><span style="color:#000;font-weight:bold">],</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">7.0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">3.2</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">4.7</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1.4</span><span style="color:#000;font-weight:bold">],</span>
@@ -1184,7 +1184,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </code></pre></li>
 <li>
 <p>Observe the predictions output:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
 </span></span></code></pre></div></li>
 </ol>
 </section><section>
@@ -1196,11 +1196,11 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>Start the MLflow model serving endpoint:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models serve --env-manager <span style="color:#204a87">local</span> -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -p <span style="color:#0000cf;font-weight:bold">1234</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models serve --env-manager <span style="color:#204a87">local</span> -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -p <span style="color:#0000cf;font-weight:bold">1234</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Send a prediction request via <code>curl</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:1234/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:1234/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    "inputs": [
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        [5.1, 3.5, 1.4, 0.2],
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">        [7.0, 3.2, 4.7, 1.4],
@@ -1210,7 +1210,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p>Observe the predictions output:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
 </span></span></code></pre></div></li>
 </ol>
 </section><section>
@@ -1218,11 +1218,11 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>Build a Docker image for the model:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models build-docker -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -n iris-classifier-dt:latest
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow models build-docker -m <span style="color:#4e9a06">"models:/m-1abbea58e1cf442ab9412b7eae572523"</span> -n iris-classifier-dt:latest
 </span></span></code></pre></div></li>
 <li>
 <p>This should output something like:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/12 16:50:16 INFO mlflow.models.flavor_backend_registry: Selected backend for flavor 'python_function'
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>2025/11/12 16:50:16 INFO mlflow.models.flavor_backend_registry: Selected backend for flavor 'python_function'
 </span></span><span style="display:flex;"><span>2025/11/12 16:50:16 INFO mlflow.pyfunc.backend: Building docker image with name mlflow-pyfunc-servable
 </span></span><span style="display:flex;"><span>[+] Building 254.3s (14/14) FINISHED                                                                                                                              docker:default
 </span></span><span style="display:flex;"><span>=&gt; [internal] load build definition from Dockerfile                                                                                                                        0.5s
@@ -1260,15 +1260,15 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p>Run the Docker container:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>docker run --rm -it --network host iris-classifier-dt:latest
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>docker run --rm -it --network host iris-classifier-dt:latest
 </span></span></code></pre></div></li>
 <li>
 <p>Send a prediction request via <code>curl</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:8000/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{ "inputs": [[5.1, 3.5, 1.4, 0.2], [7.0, 3.2, 4.7, 1.4], [6.3, 3.3, 6.0, 2.5]] }'</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>curl http://localhost:8000/invocations -H <span style="color:#4e9a06">"Content-Type:application/json"</span> --data <span style="color:#4e9a06">'{ "inputs": [[5.1, 3.5, 1.4, 0.2], [7.0, 3.2, 4.7, 1.4], [6.3, 3.3, 6.0, 2.5]] }'</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Observe the predictions output:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>{"predictions": [0, 1, 2]}
 </span></span></code></pre></div></li>
 </ol>
 
@@ -1452,7 +1452,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
   <ul>
 <li>
 <p>Assumption 1: <strong>files are structured</strong> in a specific way (decomposition of code into <em>multiple scripts</em>)</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">root-directory-name/</span><span style="color:#f8f8f8">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">root-directory-name/</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#000">├── MLproject            </span><span style="color:#f8f8f8"> </span><span style="color:#8f5902;font-style:italic"># Project descriptor file</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#000">├── train.py             </span><span style="color:#f8f8f8"> </span><span style="color:#8f5902;font-style:italic"># Training script</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#000">├── test.py              </span><span style="color:#f8f8f8"> </span><span style="color:#8f5902;font-style:italic"># Test script</span><span style="color:#f8f8f8">
@@ -1476,7 +1476,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="mlflow-projects-pt-2">MLflow Projects (pt. 2)</h2>
 <ul>
 <li>Assumption 2: <strong>enviromental dependencies are declared</strong> in the <code>python_env.yaml</code> file (or in <code>conda.yaml</code>)
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#4e9a06">"^3.13.7"</span><span style="color:#f8f8f8">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#4e9a06">"^3.13.7"</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">dependencies</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">    </span>- <span style="color:#000">mlflow</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">    </span>- <span style="color:#000">scikit-learn</span><span style="color:#f8f8f8">
@@ -1493,7 +1493,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ul>
 <li>
 <p>Assumption 3: <strong>ML tasks</strong> and <strong>their parameters</strong> are declared via the <code>MLproject</code> file</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">My ML Project</span><span style="color:#f8f8f8">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">My ML Project</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># Environment specification (choose one)</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">python_env.yaml</span><span style="color:#f8f8f8">
@@ -1516,11 +1516,11 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">        </span><span style="color:#204a87;font-weight:bold">command</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#4e9a06">"python test.py --uri {param_uri} {param_str}"</span><span style="color:#f8f8f8">
 </span></span></span></code></pre></div><ul>
 <li>so that one can start <em>training</em> via:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -P <span style="color:#000">param_file</span><span style="color:#ce5c00;font-weight:bold">=</span>data/input.csv -P <span style="color:#000">param_num</span><span style="color:#ce5c00;font-weight:bold">=</span>0.2 -P <span style="color:#000">param_int</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">200</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -P <span style="color:#000">param_file</span><span style="color:#ce5c00;font-weight:bold">=</span>data/input.csv -P <span style="color:#000">param_num</span><span style="color:#ce5c00;font-weight:bold">=</span>0.2 -P <span style="color:#000">param_int</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">200</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># if no -e &lt;entry-point&gt; is given, "main" is assumed by default</span>
 </span></span></code></pre></div></li>
 <li>so that one can start <em>testing</em> via:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -e <span style="color:#204a87">test</span> -P <span style="color:#000">param_str</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"world"</span> -P <span style="color:#000">param_uri</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"models:/my-model/1"</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run . -e <span style="color:#204a87">test</span> -P <span style="color:#000">param_str</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"world"</span> -P <span style="color:#000">param_uri</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"models:/my-model/1"</span>
 </span></span></code></pre></div></li>
 </ul>
 </li>
@@ -1530,7 +1530,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ul>
 <li>
 <p>Assumption 4: entry-point scripts (<code>train.py</code>, etc.) are <strong>implemented</strong> to read all <em>relevant parameters</em> from <em>command-line</em></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># train.py</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># train.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">argparse</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#000">parser</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">argparse</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">ArgumentParser</span><span style="color:#000;font-weight:bold">()</span>
@@ -1564,7 +1564,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p>On machine with DNS name <code>my.mlflow.server.it</code>, <strong>clone</strong> the repository, and <strong>start MLflow server</strong> via <em>Docker Compose</em></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># cd example-mlops</span>
 </span></span><span style="display:flex;"><span>docker compose up -d --wait
 </span></span></code></pre></div><ul>
@@ -1573,7 +1573,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </li>
 <li>
 <p>On your <strong>local machine</strong>, clone the repository as well, then set the MLflow Tracking URI accordingly</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># git clone https://github.com/gciatto/example-mlops.git</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># cd example-mlops</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://my.mlflow.server.it:5000
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"># or, on Windows (cmd):
@@ -1590,7 +1590,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </li>
 <li>
 <p>Again on your local machine, you may need to <strong>re-create</strong> the <em>Python environment</em> to run experiments</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
 </span></span><span style="display:flex;"><span><span style="color:#204a87">source</span> .venv/bin/activate <span style="color:#8f5902;font-style:italic"># on Windows: .venv\Scripts\activate</span>
 </span></span><span style="display:flex;"><span>pip install -r requirements.txt
 </span></span></code></pre></div></li>
@@ -1600,7 +1600,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="4">
 <li>
 <p>Notice the <code>MLproject</code> file in the repository root, paying attention to the <strong>entry points</strong> defined therein, and their <em>parameters</em>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">Census Income Prediction Demo</span><span style="color:#f8f8f8">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">Census Income Prediction Demo</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">python.yaml</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">
@@ -1655,7 +1655,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="5">
 <li>
 <p>Still on your local machine, you may now <strong>run the training</strong> via MLflow Project API</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_NAME</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"adult-classifier-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_NAME</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"adult-classifier-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
 </span></span><span style="display:flex;"><span>mlflow run -e train --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#4e9a06">"</span><span style="color:#000">$EXPERIMENT_NAME</span><span style="color:#4e9a06">"</span> . -P <span style="color:#000">model_type</span><span style="color:#ce5c00;font-weight:bold">=</span>both
 </span></span></code></pre></div><ul>
 <li>
@@ -1666,7 +1666,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </li>
 <li>
 <p>the <em>logs</em> of the training script will tell you which <strong>command</strong> to use for <em>testing the best model</em>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e <span style="color:#204a87">test</span> --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_NAME</span> . -P <span style="color:#000">run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;TRAINING_RUN_ID&gt; -P <span style="color:#000">model_uri</span><span style="color:#ce5c00;font-weight:bold">=</span>models:/&lt;BEST_MODEL_ID&gt;
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e <span style="color:#204a87">test</span> --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_NAME</span> . -P <span style="color:#000">run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;TRAINING_RUN_ID&gt; -P <span style="color:#000">model_uri</span><span style="color:#ce5c00;font-weight:bold">=</span>models:/&lt;BEST_MODEL_ID&gt;
 </span></span></code></pre></div></li>
 </ul>
 </li>
@@ -1686,7 +1686,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="mlflow-project-example-pt-5">MLflow Project Example (pt. 5)</h2>
 <ol start="7">
 <li>You may decide to <strong>re-run the experiment</strong> with different parameters, e.g.:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;to update the date-time in the experiment name, do:</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;to update the date-time in the experiment name, do:</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># EXPERIMENT_NAME="adult-classifier-$(date +'%Y-%m-%d-%H-%M')" </span>
 </span></span><span style="display:flex;"><span>mlflow run -e train --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#4e9a06">"</span><span style="color:#000">$EXPERIMENT_NAME</span><span style="color:#4e9a06">"</span> . <span style="color:#4e9a06">\
 </span></span></span><span style="display:flex;"><span>    -P <span style="color:#000">model_type</span><span style="color:#ce5c00;font-weight:bold">=</span>random_forest <span style="color:#4e9a06">\
@@ -1700,7 +1700,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="8">
 <li>
 <p>You may test the best model on the test set via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;reuse same EXPERIMENT_NAME as in training step</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#&nbsp;reuse same EXPERIMENT_NAME as in training step</span>
 </span></span><span style="display:flex;"><span>mlflow run -e <span style="color:#204a87">test</span> --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_NAME</span> . <span style="color:#4e9a06">\
 </span></span></span><span style="display:flex;"><span>    -P <span style="color:#000">run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;TRAINING_RUN_ID&gt; <span style="color:#4e9a06">\
 </span></span></span><span style="display:flex;"><span>    -P <span style="color:#000">model_uri</span><span style="color:#ce5c00;font-weight:bold">=</span>models:/&lt;BEST_MODEL_ID&gt;
@@ -1794,7 +1794,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="running-example-for-llm-based-application-pt-1">Running example for LLM-based Application (pt. 1)</h2>
 <ul>
 <li>For the final exam of a <strong>Software Engineering</strong> course, students must answer open questions about the course topics
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#4e9a06">CATEGORY</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">       QUESTION TEXT</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                          WEIGHT (DIFFICULTY)</span><span style="color:#000;font-weight:bold">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#4e9a06">CATEGORY</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">       QUESTION TEXT</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                          WEIGHT (DIFFICULTY)</span><span style="color:#000;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">############################################################################</span><span style="color:#000;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">Definition</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">     What is computer science?</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                  1</span><span style="color:#000;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">Definition</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">     What is an algorithm?</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">                      1</span><span style="color:#000;font-weight:bold">
@@ -1832,14 +1832,14 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h4 id="many-different-prompt-templates-to-be-tried-for-answer-generation">Many different <strong>prompt templates</strong> to be <em>tried</em> for answer generation</h4>
 <ul>
 <li><em>system prompt</em>:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
 </span></span></code></pre></div></li>
 </ul>
 <div class="container w-100 m-0 p-0">
     <div class="row "><div class="col col-3"><ul>
 <li><em>user</em> prompt 1 (<em>basic</em>):</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Question: {question}
 </span></span><span style="display:flex;"><span>
@@ -1851,7 +1851,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <div class="col col-3"><ul>
 <li><em>user</em> prompt 2 (<em>concise</em>):</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Question: {question}
 </span></span><span style="display:flex;"><span>
@@ -1862,7 +1862,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <div class="col col-3"><ul>
 <li><em>user</em> prompt 3 (<em>practical</em>):</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Question: {question}
 </span></span><span style="display:flex;"><span>
@@ -1877,7 +1877,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <div class="col col-3"><ul>
 <li><em>user</em> prompt 4 (<em>academic</em>):</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: {category}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Difficulty: {weight}/4 (higher means more complex)
 </span></span><span style="display:flex;"><span>
@@ -1894,7 +1894,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </div>
 <ul>
 <li>system prompt addendum for <em>tools</em>:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
 </span></span><span style="display:flex;"><span>In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
 </span></span></code></pre></div></li>
 </ul>
@@ -1943,8 +1943,8 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </li>
 <li>
 <p>Prompt 1 (basic):</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
 </span></span><span style="display:flex;"><span>Question: What is computer science?
 </span></span><span style="display:flex;"><span>Difficulty: 1/4
 </span></span><span style="display:flex;"><span>
@@ -1952,7 +1952,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p>Generated answer:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Computer science is the systematic study of computers and computational systems. 
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Computer science is the systematic study of computers and computational systems. 
 </span></span><span style="display:flex;"><span>It involves understanding algorithms, data structures, software design, programming languages, 
 </span></span><span style="display:flex;"><span>and the theoretical foundations of computation, as well as the practical aspects of developing 
 </span></span><span style="display:flex;"><span>and applying software and hardware solutions to solve problems.
@@ -1979,10 +1979,10 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </li>
 <li>
 <p>Prompt 1 (basic) + tools addendum:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>You are a university professor preparing model answers for a software engineering examination.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Always use the provided web search tool to complement your answers with relevant and up-to-date links or references.
 </span></span><span style="display:flex;"><span>In calling the tool, you should automatically infer the most relevant query based on the conversation so far.
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Category: Definition
 </span></span><span style="display:flex;"><span>Question: What is an algorithm?
 </span></span><span style="display:flex;"><span>Difficulty: 1/4
 </span></span><span style="display:flex;"><span>
@@ -1990,7 +1990,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p>The tool:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@tool</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@tool</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">web_search_tool</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">query</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">int</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#204a87">str</span><span style="color:#000;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#4e9a06">"""
 </span></span></span><span style="display:flex;"><span><span style="color:#4e9a06">    Tool function for LLM to search the web and get formatted results.
@@ -2015,9 +2015,9 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="4">
 <li>
 <p>Generated intermediate <em>tool invocation</em>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">web_search_tool</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"What is an algorithm definition concise exam context computer science"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">)</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">web_search_tool</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">"What is an algorithm definition concise exam context computer science"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max_results</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">)</span>
 </span></span></code></pre></div><p>Result:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Relevant Web search results:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>Relevant Web search results:
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">-</span> [<span style="color:#204a87;font-weight:bold">Wikipedia Algorithm - Wikipedia</span>](<span style="color:#c4a000">https://en.wikipedia.org/wiki/Algorithm</span>) 
 </span></span><span style="display:flex;"><span>4 days ago - 
@@ -2030,7 +2030,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </ol>
 <ul>
 <li><strong>Final</strong> generated answer:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>An algorithm is a finite, well‑defined sequence of unambiguous instructions that, given specified input(s), 
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>An algorithm is a finite, well‑defined sequence of unambiguous instructions that, given specified input(s), 
 </span></span><span style="display:flex;"><span>produces the desired output(s) and terminates after a finite number of steps.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Key properties (for exam answers)
@@ -2060,13 +2060,13 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol>
 <li>
 <p><strong>Clone</strong> the repository and <strong>start</strong> a local MLflow Tracking Server via Docker Compose:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>git clone https://github.com/gciatto/example-llmops.git
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>git clone https://github.com/gciatto/example-llmops.git
 </span></span><span style="display:flex;"><span><span style="color:#204a87">cd</span> example-llmops
 </span></span><span style="display:flex;"><span>docker-compose up -d --wait
 </span></span></code></pre></div></li>
 <li>
 <p>Set the <em>environment variables</em> for <strong>MLflow Tracking Server URI</strong> and <strong>OpenAI API key</strong>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://localhost:5000"</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">MLFLOW_TRACKING_URI</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"http://localhost:5000"</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87">export</span> <span style="color:#000">OPENAI_API_KEY</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"sk-..."</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># on Windows (cmd):</span>
 </span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># set MLFLOW_TRACKING_URI=http://localhost:5000</span>
@@ -2077,7 +2077,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span></code></pre></div></li>
 <li>
 <p><strong>Create and activate</strong> a Python virtual environment, then install dependencies:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>python -m venv .venv
 </span></span><span style="display:flex;"><span><span style="color:#204a87">source</span> .venv/bin/activate <span style="color:#8f5902;font-style:italic"># on Windows: .venv\Scripts\activate</span>
 </span></span><span style="display:flex;"><span>pip install -r requirements.txt
 </span></span></code></pre></div></li>
@@ -2086,7 +2086,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="exemplifying-mlflow-for-llm-applications-pt-2">Exemplifying MLflow for LLM Applications (pt. 2)</h2>
 <ol start="4">
 <li>Have a look to the <strong>project structure</strong> (Docker and other irrelevant files are omitted):
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>example-llmops/
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>example-llmops/
 </span></span><span style="display:flex;"><span>├── MLproject                   <span style="color:#8f5902;font-style:italic"># MLflow Project descriptor file</span>
 </span></span><span style="display:flex;"><span>├── register_all_prompts.py     <span style="color:#8f5902;font-style:italic"># Script to register prompt templates</span>
 </span></span><span style="display:flex;"><span>├── generate_answers.py         <span style="color:#8f5902;font-style:italic"># Script to generate answers without agents/tools</span>
@@ -2108,7 +2108,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="5">
 <li>
 <p>Notice the <code>MLproject</code> file in the repository root, paying attention to the <strong>entry points</strong> defined therein, and their <em>parameters</em>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">quiz-answer-generator</span><span style="color:#f8f8f8">
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">quiz-answer-generator</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">python_env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8"> </span><span style="color:#000">python_env.yaml</span><span style="color:#f8f8f8">
 </span></span></span><span style="display:flex;"><span><span style="color:#f8f8f8">
@@ -2163,10 +2163,10 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <h2 id="exemplifying-mlflow-for-llm-applications-pt-4">Exemplifying MLflow for LLM Applications (pt. 4)</h2>
 <ol start="6">
 <li>Also give a look to the code in <code>evaluate_responses.py</code> script, where <em>evaluation criteria</em> are defined:
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">mlflow</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">mlflow</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">mlflow.entities</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">Feedback</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">from</span> <span style="color:#000">mlflow.genai.scorers</span> <span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">scorer</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">RelevanceToQuery</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">enough_words</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">dict</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">text</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">[</span><span style="color:#4e9a06">'choices'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'message'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'content'</span><span style="color:#000;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">text</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">split</span><span style="color:#000;font-weight:bold">())</span>
@@ -2177,7 +2177,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response does not have enough words because it has less than 10 words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">."</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">score</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">rationale</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">rationale</span><span style="color:#000;font-weight:bold">)</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#5c35cc;font-weight:bold">@scorer</span>
 </span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">not_too_many_words</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">dict</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-&gt;</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">text</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">outputs</span><span style="color:#000;font-weight:bold">[</span><span style="color:#4e9a06">'choices'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'message'</span><span style="color:#000;font-weight:bold">][</span><span style="color:#4e9a06">'content'</span><span style="color:#000;font-weight:bold">]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">word_count</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">text</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">split</span><span style="color:#000;font-weight:bold">())</span>
@@ -2188,7 +2188,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#4e9a06">f</span><span style="color:#4e9a06">"The response has too many words: </span><span style="color:#4e9a06">{</span><span style="color:#000">word_count</span><span style="color:#4e9a06">}</span><span style="color:#4e9a06">."</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">Feedback</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">value</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">score</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">rationale</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">rationale</span><span style="color:#000;font-weight:bold">)</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">guidelines_model</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">str</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">None</span><span style="color:#000;font-weight:bold">):</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">def</span> <span style="color:#000">guidelines_model</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#204a87">str</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">None</span><span style="color:#000;font-weight:bold">):</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"english"</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">guidelines</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"The answer should be in English."</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">yield</span> <span style="color:#000">Guidelines</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">model</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">model</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">name</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"software_engineering_related"</span><span style="color:#000;font-weight:bold">,</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">guidelines</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"The answer is correctly contextualizing the question within the domain of software engineering."</span><span style="color:#000;font-weight:bold">)</span>
@@ -2204,7 +2204,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="7">
 <li>
 <p>You may now <strong>register all prompt templates</strong> in a <em>new experiment</em> via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
 </span></span><span style="display:flex;"><span>mlflow run -e register_all_prompts --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> .
 </span></span></code></pre></div></li>
 <li>
@@ -2223,7 +2223,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="10">
 <li>
 <p>You may now <strong>generate answers</strong> via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e generate_answers --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> . -P <span style="color:#000">max_questions</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">4</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span>mlflow run -e generate_answers --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> . -P <span style="color:#000">max_questions</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">4</span>
 </span></span></code></pre></div><p>(we put a limit of 4 questions to save time and costs)</p>
 </li>
 <li>
@@ -2247,7 +2247,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="13">
 <li>
 <p>You may now <strong>evaluate generated answers</strong> via (see the output of generation runs for the exact command):</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># reuse same EXPERIMENT_ID as in generation step</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># reuse same EXPERIMENT_ID as in generation step</span>
 </span></span><span style="display:flex;"><span>mlflow run -e evaluate_responses --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-id &lt;EXPERIMENT_ID&gt; . -P <span style="color:#000">generation_run_id</span><span style="color:#ce5c00;font-weight:bold">=</span>&lt;GENERATION_RUN_ID&gt;
 </span></span></code></pre></div><p>(this may take some time, as <code>Guidelines</code> evaluations are performed via further LLM queries)</p>
 </li>
@@ -2261,7 +2261,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 <ol start="15">
 <li>
 <p>You may now <strong>generate answers with agents &amp; tools</strong> via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-agents-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="nohighlight" data-noescape=""><span style="display:flex;"><span><span style="color:#000">EXPERIMENT_ID</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">"se-answers-agents-</span><span style="color:#204a87;font-weight:bold">$(</span>date +<span style="color:#4e9a06">'%Y-%m-%d-%H-%M'</span><span style="color:#204a87;font-weight:bold">)</span><span style="color:#4e9a06">"</span>
 </span></span><span style="display:flex;"><span>mlflow run -e generate_answers_with_agent --env-manager<span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87">local</span> --experiment-name <span style="color:#000">$EXPERIMENT_ID</span> . -P <span style="color:#000">max_questions</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#0000cf;font-weight:bold">2</span>
 </span></span></code></pre></div><p>(we put a limit of 2 questions to save time and costs)</p>
 </li>
@@ -2281,7 +2281,7 @@ Neural network $\equiv$ cascade of <em>layers</em></p>
 </section><section>
 <h1 id="talk-is-over">Talk is Over</h1>
 <br>
-<p>Compiled on: 2026-01-23
+<p>Compiled on: 2026-01-29
  — <a href="?print-pdf&amp;pdfSeparateFragments=false"><i class="fa fa-print" aria-hidden="true"></i> printable version</a></p>
 <p><a href="#toc"><i class="fa fa-undo" aria-hidden="true"></i> back to ToC</a></p>
 </section>
